@@ -1,0 +1,266 @@
+\documentclass[12pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[brazilian]{babel}
+\usepackage{lmodern}
+\usepackage[a4paper,top=3cm,bottom=2cm,left=3cm,right=2cm]{geometry}
+\usepackage{setspace}
+\usepackage{booktabs}
+\usepackage{float}
+\usepackage{tabularx}
+\usepackage{enumitem}
+\usepackage{url}
+\usepackage[hidelinks]{hyperref}
+\def\UrlBreaks{\do\/\do-\do_\do.\do a\do e\do i\do o\do u}
+
+\onehalfspacing
+\setlist{itemsep=2pt,topsep=4pt}
+
+\title{Guia de Requerimentos UCSal\\[4pt]
+\large Proposta de solução --- Programação Orientada a Objetos Avançada}
+\author{João Vitor Bomfim de Souza\\
+\small Engenharia de Software --- Universidade Católica do Salvador}
+\date{Outubro de 2026}
+
+\begin{document}
+
+\maketitle
+
+\section{Problema}
+
+Quem já precisou abrir um requerimento no Portal do Aluno da UCSal sabe que a parte difícil não é
+acompanhar o pedido depois de aberto. O portal (TOTVS Educacional) mostra número de protocolo, status
+e o histórico de etapas por setor. O que falta é informação \emph{antes} de clicar em ``Solicitar''.
+
+Fomos ao portal com uma conta de aluno ativa, em outubro de 2026, e registramos o que aparece em
+\emph{Solicitações $\rightarrow$ Requerimentos}:
+
+\begin{itemize}
+  \item a aba ``Disponíveis'' lista oito tipos de requerimento. Todo o resto (declarações, histórico,
+        trancamento, transferência externa, FIES, colação de grau) fica escondido dentro de um tipo
+        genérico chamado ``Abertura de Requerimento'', em uma lista suspensa com 37 categorias
+        identificadas apenas pelo nome;
+  \item ao abrir os detalhes desse tipo genérico, os campos \emph{Descrição} e \emph{Procedimentos}
+        estão vazios;
+  \item no formulário, a coluna \emph{Prazo} da tabela de entrega também está vazia. Não há lista de
+        documentos exigidos nem indicação de quais setores vão analisar o pedido. O aluno escreve o
+        que acha que deve escrever em um campo de texto livre.
+\end{itemize}
+
+Três requerimentos reais de um integrante da equipe mostram onde isso pesa:
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabularx}{\textwidth}{@{}lccX@{}}
+\toprule
+Requerimento & Aberto em & Dias até fechar & O que aconteceu \\
+\midrule
+Dispensa de estágio & 03/08/2025 & 32 &
+  Indeferido por ``campo equivocado''. A categoria escolhida servia só para o curso de Direito,
+  mas não existe outra para encerrar um estágio. A resposta não indicou o caminho certo. \\
+\addlinespace
+Trancamento de disciplina & 28/08/2026 & 31 &
+  O Registro Acadêmico resolveu em 3 dias. Depois o pedido ficou 24 dias no Financeiro para
+  recalcular parcelas, etapa que o aluno não sabia que existia. \\
+\addlinespace
+Transferência interna & 27/06/2025 & 10 &
+  Deferido, mas terminou com ``ajuste as disciplinas se necessário'', devolvendo trabalho ao aluno. \\
+\bottomrule
+\end{tabularx}
+\caption{Protocolos de um integrante da equipe no Portal do Aluno (dados consultados em 21/10/2026).}
+\end{table}
+
+O primeiro caso é o mais claro. O aluno tinha urgência, porque um novo estágio dependia da baixa do
+anterior. Escolheu a categoria que parecia mais próxima, esperou um mês e recebeu uma negativa por ter
+usado o campo errado. O erro não era de má vontade de ninguém: o próprio sistema não diz para que serve
+cada categoria.
+
+Isso não é um caso isolado. No Reclame Aqui, a UCSal tem 69 reclamações registradas e nota média 6,16
+no período de março a agosto de 2026. Os assuntos que mais se repetem são acesso ao portal e ao AVA,
+requerimentos sem retorno (trancamento, aproveitamento de disciplinas, reembolso) e atendimento por
+WhatsApp que para de responder. Em uma delas, o aluno diz que não conseguia abrir nenhum requerimento
+para pedir dispensa de disciplinas; em outra, que o sistema novo tirou a ferramenta de acompanhamento
+que existia antes.
+
+Resumindo: o aluno abre o pedido no escuro. Quando erra, só descobre semanas depois, e a secretaria
+gasta tempo analisando pedidos que nunca poderiam ser deferidos naquele campo.
+
+\section{Público-alvo}
+
+\paragraph{Usuário principal.} Alunos de graduação da UCSal, presencial e EAD, que precisam abrir algum
+requerimento. Alguns grupos sentem mais o problema:
+\begin{itemize}
+  \item calouros e alunos transferidos, que ainda não sabem como a universidade funciona por dentro;
+  \item bolsistas ProUni e alunos com FIES, porque quase todo pedido deles passa também pela análise
+        da bolsa ou do Financeiro;
+  \item alunos que trabalham, que dependem de declarações e de trancamentos com prazo curto.
+\end{itemize}
+
+\paragraph{Beneficiados indiretos.} O Registro Acadêmico e a secretaria, que passariam a receber menos
+pedidos na categoria errada, e o DCE ou centros acadêmicos, que hoje respondem essas dúvidas um a um em
+grupos de WhatsApp.
+
+\section{Solução}
+
+\subsection{Ideia central}
+
+A primeira tentação seria construir um sistema de chamados paralelo ao portal, com protocolo e
+acompanhamento próprios. Descartamos essa ideia porque ela só muda a dor de lugar: o aluno passaria a
+cuidar de dois sistemas, e a secretaria não tem motivo para adotar uma ferramenta nova.
+
+O \textbf{Guia de Requerimentos} atua no momento anterior ao pedido. O aluno continua abrindo o
+requerimento no Portal do Aluno, como hoje, mas chega lá sabendo qual categoria escolher, o que anexar,
+o que escrever e quanto tempo costuma levar. Nenhum passo é acrescentado ao processo oficial.
+
+\subsection{Funcionalidades}
+
+\begin{enumerate}
+  \item \textbf{Triagem.} O aluno descreve o que precisa com as próprias palavras (por exemplo,
+        ``preciso encerrar meu estágio para começar outro''). O sistema compara a descrição com
+        palavras-chave e regras cadastradas e indica a categoria exata do portal. Se não existir
+        categoria adequada, ele diz isso e aponta o canal certo (Ouvidoria, coordenação, CRA).
+  \item \textbf{Checklist do pedido.} Para a categoria escolhida, mostra os documentos que precisam ir
+        anexados, os setores por onde o pedido vai passar e os efeitos que o aluno precisa saber antes,
+        como recálculo de parcelas no trancamento ou análise da bolsa na transferência.
+  \item \textbf{Modelo de texto.} Gera o texto para o campo ``Solicitação'' com as informações que o
+        setor costuma pedir. O aluno copia e cola no portal.
+  \item \textbf{Prazo de referência.} Alunos podem colar o ``Histórico de etapas'' de um protocolo já
+        concluído. O sistema lê as datas, calcula quantos dias o pedido ficou em cada setor e guarda
+        apenas o tipo de requerimento e os intervalos, sem nome, RA ou texto do pedido. Com isso,
+        mostra a mediana de dias por tipo e por setor, e o aluno sabe se a espera dele está dentro do
+        normal ou se já faz sentido procurar a Ouvidoria.
+  \item \textbf{Registro de indeferimentos.} Quando um pedido volta negado por motivo de procedimento
+        (``campo equivocado'', ``faltou documento''), o motivo vira uma regra nova da triagem, para que
+        o próximo aluno não caia no mesmo erro.
+\end{enumerate}
+
+\subsection{O que o sistema não faz}
+
+\begin{itemize}
+  \item Não pede login nem senha do Portal do Aluno e não acessa o TOTVS em nome do aluno.
+  \item Não envia requerimentos. O pedido oficial continua sendo feito no portal.
+  \item Não depende de integração com a universidade, já que não há API pública disponível.
+\end{itemize}
+
+Essa limitação é intencional. Um sistema que pedisse a senha do portal teria problemas de segurança e
+dificilmente seria aceito pela instituição.
+
+\subsection{Arquitetura e tecnologias}
+
+A aplicação será feita em Java 21 com Spring Boot 3, seguindo a stack definida para a disciplina:
+\begin{itemize}
+  \item Spring Web e Thymeleaf para as telas, sem framework de front-end separado;
+  \item Spring Data JPA com PostgreSQL (H2 durante o desenvolvimento e nos testes);
+  \item JUnit 5 e Mockito para testes de unidade da triagem e do cálculo de prazos;
+  \item Docker Compose para subir aplicação e banco na demonstração.
+\end{itemize}
+
+O domínio aproveita bem os conceitos de orientação a objetos vistos no semestre:
+\begin{itemize}
+  \item \textbf{herança e polimorfismo} em \texttt{TipoRequerimento}, já que cada tipo tem documentos,
+        setores e efeitos próprios;
+  \item \textbf{Chain of Responsibility} na triagem: cada regra tenta reconhecer a descrição e, se não
+        conseguir, passa para a seguinte;
+  \item \textbf{State} para representar as etapas lidas do histórico (em análise no Registro
+        Acadêmico, no Financeiro, deferido, indeferido);
+  \item \textbf{Strategy} no cálculo do prazo de referência, permitindo trocar mediana por percentil
+        sem mexer no resto;
+  \item \textbf{Observer} para avisar o aluno quando o prazo dele passar do usual para aquele tipo.
+\end{itemize}
+
+\subsection{Quem mantém as informações}
+
+O ponto fraco da proposta é a base de regras ficar desatualizada. A ideia é que ela seja mantida por
+monitores ou pelo DCE, com uma tela simples de cadastro de categorias, documentos e regras de triagem.
+Cada regra guarda a data da última revisão, e o aluno vê essa data junto da orientação.
+
+\section{Validação}
+
+A validação será feita com alunos da própria UCSal, comparando a abertura de requerimentos com e sem o
+Guia. Não haverá envio de pedidos reais: os participantes vão simular a escolha da categoria e o
+preenchimento, parando antes do botão ``Solicitar''.
+
+\subsection{Procedimento}
+
+\begin{enumerate}
+  \item Recrutar entre 15 e 20 alunos de cursos e semestres diferentes, incluindo pelo menos alguns
+        calouros e bolsistas.
+  \item Aplicar um questionário curto antes do teste: quantos requerimentos já abriram, se algum foi
+        indeferido por erro de categoria ou documento, quanto tempo esperaram.
+  \item Dar três situações reais para cada participante, por exemplo: encerrar um estágio para começar
+        outro, trancar uma disciplina por conflito com o trabalho e pedir declaração de matrícula para
+        o estágio.
+  \item Metade dos participantes resolve as situações só com o portal; a outra metade usa o Guia antes.
+        Depois os grupos trocam de situação.
+  \item Ao final, aplicar um questionário de percepção com escala de 1 a 5 e uma pergunta aberta.
+\end{enumerate}
+
+\subsection{Métricas}
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabularx}{\textwidth}{@{}lXl@{}}
+\toprule
+Métrica & Como medir & Meta \\
+\midrule
+Acerto de categoria & categoria escolhida igual à correta, conferida pela equipe & acima de 85\% com o Guia \\
+Documentos completos & anexos indicados batem com a lista exigida & acima de 80\% com o Guia \\
+Tempo até o envio & cronometrado do início da situação até o ponto de clicar em ``Solicitar'' & sem piora em relação ao portal \\
+Clareza percebida & média da pergunta ``eu sabia o que esperar depois de enviar'' (1 a 5) & 4 ou mais \\
+\bottomrule
+\end{tabularx}
+\caption{Métricas de validação.}
+\end{table}
+
+O tempo até o envio é a métrica que mostra se a solução está curando a dor ou só transferindo. Se o
+aluno acerta mais, mas leva o dobro do tempo, o Guia virou mais uma etapa e precisa ser simplificado.
+
+\subsection{Resultados}
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{@{}lcc@{}}
+\toprule
+Métrica & Só portal & Com o Guia \\
+\midrule
+Acerto de categoria & --- & --- \\
+Documentos completos & --- & --- \\
+Tempo médio até o envio & --- & --- \\
+Clareza percebida & --- & --- \\
+\bottomrule
+\end{tabular}
+\caption{Resultados (a preencher após os testes).}
+\end{table}
+
+Além dos números, vamos levar a proposta à secretaria ou ao Registro Acadêmico para saber quais
+categorias mais recebem pedidos errados. Essa conversa também serve para conferir se as regras
+cadastradas estão corretas antes da demonstração.
+
+\section*{Referências}
+\raggedright
+
+\begin{itemize}[label={},leftmargin=0pt]
+  \item RECLAME AQUI. \emph{Ucsal}. Disponível em:
+        \url{https://www.reclameaqui.com.br/empresa/ucsal/}. Acesso em: 21 out. 2026.
+  \item RECLAME AQUI. \emph{Sem acesso ao portal do Aluno --- Ucsal}. Disponível em:
+        \url{https://www.reclameaqui.com.br/ucsal/sem-acesso-ao-portal-do-aluno_a8oxIWDkHcwGYj8w/}.
+        Acesso em: 21 out. 2026.
+  \item RECLAME AQUI. \emph{Portal do aluno e AVA não funcionam, falta de suporte --- Ucsal}.
+        Disponível em:
+        \url{https://www.reclameaqui.com.br/ucsal/portal-do-aluno-e-ava-nao-funcionam-falta-de-suporte_Ilj3F59BOAl4g1Ji/}.
+        Acesso em: 21 out. 2026.
+  \item RECLAME AQUI. \emph{Aproveitamento de disciplinas --- Ucsal}. Disponível em:
+        \url{https://www.reclameaqui.com.br/ucsal/aproveitamento-de-disciplinas_hodiNg7XaFLHC6uc/}.
+        Acesso em: 21 out. 2026.
+  \item RECLAME AQUI. \emph{Universidade de verdade, pra quem? --- Ucsal}. Disponível em:
+        \url{https://www.reclameaqui.com.br/ucsal/universidade-de-verdade-pra-quem_16238551/}.
+        Acesso em: 21 out. 2026.
+  \item UNIVERSIDADE CATÓLICA DO SALVADOR. \emph{Portal do Aluno (TOTVS Educacional)}. Disponível em:
+        \url{https://novoportal.ucsal.br/}. Acesso em: 21 out. 2026.
+\end{itemize}
+
+\end{document}
