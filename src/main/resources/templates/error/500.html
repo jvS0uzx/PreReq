@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Erro interno')}"></head>
+<body>
+    <header th:replace="~{fragments/layout :: menu}"></header>
+    <main class="container">
+        <h1>Erro 500</h1>
+        <p>Ocorreu um erro interno no servidor. Tente novamente mais tarde.</p>
+        <a th:href="@{/}" role="button">Voltar ao início</a>
+    </main>
+    <footer th:replace="~{fragments/layout :: rodape}"></footer>
+</body>
+</html>

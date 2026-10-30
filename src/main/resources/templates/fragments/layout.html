@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<!-- Fragmento 1: Head -->
+<head th:fragment="head(titulo)">
+    <meta charset="UTF-8">
+    <title th:text="${titulo} + ' - PreReq'"></title>
+    <!-- Aqui referenciamos o CSS localmente como a tarefa pediu -->
+    <link rel="stylesheet" th:href="@{/css/pico.min.css}">
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+
+<!-- Fragmento 2: Menu com as rotas -->
+<header th:fragment="menu">
+    <nav>
+        <ul>
+            <li><strong>PreReq</strong></li>
+        </ul>
+        <ul>
+            <li><a th:href="@{/}">Início</a></li>
+            <li><a th:href="@{/triagem}">Triagem</a></li>
+            <li><a th:href="@{/categorias}">Categorias</a></li>
+            <li><a th:href="@{/prazos}">Prazos</a></li>
+            <li><a th:href="@{/espera}">Minha espera</a></li>
+            <li><a th:href="@{/indeferimentos/novo}">Relatar indeferimento</a></li>
+            <li><a th:href="@{/admin}">Administração</a></li>
+        </ul>
+    </nav>
+</header>
+
+<!-- Fragmento 3: Mensagens Flash -->
+<div th:fragment="mensagens">
+    <div th:if="${sucesso}" th:text="${sucesso}"></div>
+    <div th:if="${erro}" th:text="${erro}"></div>
+</div>
+
+<!-- Fragmento 4: Rodapé -->
+<footer th:fragment="rodape">
+    <p>PreReq - Sistema de Triagem</p>
+</footer>
+
+</body>
+</html>

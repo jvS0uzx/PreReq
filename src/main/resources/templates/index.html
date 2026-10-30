@@ -1,15 +1,26 @@
 <!DOCTYPE html>
 <html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PreReq</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
-</head>
+<!-- Chama o cabeçalho do seu layout.html (que já tem o CSS local) -->
+<head th:replace="~{fragments/layout :: head('Início')}"></head>
 <body>
+    <!-- Chama o menu do seu layout.html -->
+    <header th:replace="~{fragments/layout :: menu}"></header>
+
     <main class="container">
-        <h1 th:text="${titulo}">PreReq</h1>
-        <p>Guia de Requerimentos UCSal</p>
+        <!-- Chama a área de mensagens de erro/sucesso do seu layout.html -->
+        <div th:replace="~{fragments/layout :: mensagens}"></div>
+
+        <h1>PreReq - Guia de Requerimentos</h1>
+        <!-- As 3 frases explicando o projeto -->
+        <p>O PreReq é um sistema de triagem inteligente para requerimentos acadêmicos da UCSal.</p>
+        <p>Ele ajuda você a descobrir os documentos corretos e os prazos antes de abrir um protocolo oficial.</p>
+        <p>Faça a triagem do seu pedido de forma rápida para evitar indeferimentos na secretaria.</p>
+
+        <!-- Botão para a rota /triagem -->
+        <a th:href="@{/triagem}" role="button">Começar Triagem</a>
     </main>
+
+    <!-- Chama o rodapé do seu layout.html -->
+    <footer th:replace="~{fragments/layout :: rodape}"></footer>
 </body>
 </html>

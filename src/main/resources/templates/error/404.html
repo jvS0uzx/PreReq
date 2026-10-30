@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Página não encontrada')}"></head>
+<body>
+    <header th:replace="~{fragments/layout :: menu}"></header>
+    <main class="container">
+        <h1>Erro 404</h1>
+        <p>A página que você tentou acessar não existe ou foi movida.</p>
+        <a th:href="@{/}" role="button">Voltar ao início</a>
+    </main>
+    <footer th:replace="~{fragments/layout :: rodape}"></footer>
+</body>
+</html>
