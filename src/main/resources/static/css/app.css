@@ -1,0 +1,22 @@
+nav,
+nav ul {
+    flex-wrap: wrap;
+}
+
+.aviso {
+    padding: var(--pico-spacing);
+    border-left: 0.25rem solid;
+    border-radius: var(--pico-border-radius);
+}
+
+.aviso-sucesso {
+    color: var(--pico-ins-color);
+    border-color: var(--pico-ins-color);
+    background-color: color-mix(in srgb, var(--pico-ins-color) 12%, transparent);
+}
+
+.aviso-erro {
+    color: var(--pico-del-color);
+    border-color: var(--pico-del-color);
+    background-color: color-mix(in srgb, var(--pico-del-color) 12%, transparent);
+}
