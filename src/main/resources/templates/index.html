@@ -1,15 +1,20 @@
 <!DOCTYPE html>
 <html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PreReq</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
-</head>
+<head th:replace="~{fragments/layout :: head('Início')}"></head>
 <body>
+    <header th:replace="~{fragments/layout :: menu}"></header>
+
     <main class="container">
-        <h1 th:text="${titulo}">PreReq</h1>
-        <p>Guia de Requerimentos UCSal</p>
+        <div th:replace="~{fragments/layout :: mensagens}"></div>
+
+        <h1>PreReq - Guia de Requerimentos</h1>
+        <p>O PreReq é um sistema de triagem inteligente para requerimentos acadêmicos da UCSal.</p>
+        <p>Ele ajuda você a descobrir os documentos corretos e os prazos antes de abrir um protocolo oficial.</p>
+        <p>Faça a triagem do seu pedido de forma rápida para evitar indeferimentos na secretaria.</p>
+
+        <a th:href="@{/triagem}" role="button">Começar Triagem</a>
     </main>
+
+    <footer th:replace="~{fragments/layout :: rodape}"></footer>
 </body>
 </html>

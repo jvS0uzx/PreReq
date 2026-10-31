@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head(titulo)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${titulo} + ' - PreReq'"></title>
+    <link rel="stylesheet" th:href="@{/css/pico.min.css}">
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+
+<header th:fragment="menu" class="container">
+    <nav>
+        <ul>
+            <li><strong>PreReq</strong></li>
+        </ul>
+        <ul>
+            <li><a th:href="@{/}">Início</a></li>
+            <li><a th:href="@{/triagem}">Triagem</a></li>
+            <li><a th:href="@{/categorias}">Categorias</a></li>
+            <li><a th:href="@{/prazos}">Prazos</a></li>
+            <li><a th:href="@{/espera}">Minha espera</a></li>
+            <li><a th:href="@{/indeferimentos/novo}">Relatar indeferimento</a></li>
+            <li><a th:href="@{/admin}">Administração</a></li>
+        </ul>
+    </nav>
+</header>
+
+<div th:fragment="mensagens">
+    <p th:if="${sucesso}" th:text="${sucesso}" class="aviso aviso-sucesso" role="status"></p>
+    <p th:if="${erro}" th:text="${erro}" class="aviso aviso-erro" role="alert"></p>
+</div>
+
+<footer th:fragment="rodape" class="container">
+    <p>PreReq - Sistema de Triagem</p>
+</footer>
+
+</body>
+</html>
