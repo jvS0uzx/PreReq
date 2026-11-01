@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Administração')}"></head>
+<body>
+    <header th:replace="~{fragments/layout :: menu}"></header>
+
+    <main class="container">
+        <div th:replace="~{fragments/layout :: mensagens}"></div>
+
+        <h1>Administração</h1>
+        <p>Cadastros da base usada na triagem e no checklist.</p>
+
+        <ul>
+            <li><a th:href="@{/admin/setores}">Setores</a></li>
+            <li><a th:href="@{/admin/documentos}">Documentos</a></li>
+            <li><a th:href="@{/admin/categorias}">Categorias</a></li>
+            <li><a th:href="@{/admin/regras}">Regras de triagem</a></li>
+        </ul>
+
+        <form th:action="@{/logout}" method="post">
+            <button type="submit" class="secondary">Sair</button>
+        </form>
+    </main>
+
+    <footer th:replace="~{fragments/layout :: rodape}"></footer>
+</body>
+</html>
