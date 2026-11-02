@@ -11,9 +11,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
-/**
- * Só a área administrativa exige login. O aluno usa o resto do sistema sem conta.
- */
 @Configuration
 public class SecurityConfig {
 
@@ -22,10 +19,8 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(rotas -> rotas
                         .requestMatchers("/admin/**").authenticated()
-                        // Rotas do aluno (/triagem, /categorias, /prazos, /espera, /indeferimentos),
-                        // arquivos estáticos, /error e /actuator/health ficam abertas.
                         .anyRequest().permitAll())
-                .formLogin(formulario -> formulario.permitAll())
+                .formLogin(formulario -> formulario.defaultSuccessUrl("/admin"))
                 .logout(saida -> saida.logoutSuccessUrl("/"));
         return http.build();
     }
@@ -35,7 +30,6 @@ public class SecurityConfig {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
-    /** Usuário único do admin, lido de ADMIN_USER e ADMIN_PASSWORD (.env ou ambiente). */
     @Bean
     public UserDetailsService usuarioAdmin(
             @Value("${ADMIN_USER}") String usuario,

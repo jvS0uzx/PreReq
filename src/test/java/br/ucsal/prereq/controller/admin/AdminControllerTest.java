@@ -2,6 +2,8 @@ package br.ucsal.prereq.controller.admin;
 
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.endsWith;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.formLogin;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.logout;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
@@ -9,6 +11,7 @@ import static org.springframework.security.test.web.servlet.response.SecurityMoc
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
@@ -17,6 +20,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.mock.web.MockHttpSession;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.stereotype.Controller;
 import org.springframework.test.web.servlet.MockMvc;
@@ -81,6 +85,23 @@ class AdminControllerTest {
     void deveRecusarLoginQuandoSenhaEstiverErrada() throws Exception {
         mockMvc.perform(formLogin().user("admin").password("errada"))
                 .andExpect(unauthenticated());
+    }
+
+    @Test
+    void deveIrParaPainelQuandoEntrarPelaTelaDeLogin() throws Exception {
+        mockMvc.perform(formLogin().user("admin").password("senha-de-teste"))
+                .andExpect(redirectedUrl("/admin"));
+    }
+
+    @Test
+    void deveVoltarParaRotaPedidaQuandoEntrarDepoisDoRedirecionamento() throws Exception {
+        MockHttpSession sessao = (MockHttpSession) mockMvc.perform(get("/admin/setores"))
+                .andReturn().getRequest().getSession();
+
+        mockMvc.perform(post("/login").session(sessao).with(csrf())
+                .param("username", "admin")
+                .param("password", "senha-de-teste"))
+                .andExpect(header().string("Location", endsWith("/admin/setores?continue")));
     }
 
     @Test
