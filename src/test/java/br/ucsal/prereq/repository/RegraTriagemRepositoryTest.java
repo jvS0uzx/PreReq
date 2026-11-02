@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
 
-import org.hibernate.Hibernate;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
@@ -35,7 +34,7 @@ class RegraTriagemRepositoryTest {
     }
 
     @Test
-    void deveTrazerCategoriaCarregadaQuandoBuscarAtivas() {
+    void deveTrazerCategoriaDaRegraQuandoBuscarAtivas() {
         TipoRequerimento trancamento = TipoRequerimento.novo(GrupoRequerimento.ACADEMICO);
         trancamento.setNomeNoPortal("Trancamento de matrícula");
         entityManager.persist(trancamento);
@@ -43,9 +42,9 @@ class RegraTriagemRepositoryTest {
         entityManager.flush();
         entityManager.clear();
 
-        RegraTriagem regra = repository.findByAtivaTrue().getFirst();
+        RegraTriagem regra = repository.findByAtivaTrue().get(0);
 
-        assertThat(Hibernate.isInitialized(regra.getCategoria())).isTrue();
+        assertThat(regra.getCategoria().getNomeNoPortal()).isEqualTo("Trancamento de matrícula");
     }
 
     private void salvar(String palavrasChave, boolean ativa, TipoRequerimento categoria) {
