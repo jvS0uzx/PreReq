@@ -1,0 +1,22 @@
+palavras_chave;nome_no_portal;canal_alternativo;explicacao;prioridade
+tce,assinar,assinatura;ASSINATURA DE CONTRATO DE ESTÁGIO - GRADUAÇÃO;;Para a coordenação assinar o Termo de Compromisso de Estágio antes de começar;5
+termo de compromisso,contrato de estagio;ASSINATURA DE CONTRATO DE ESTÁGIO - GRADUAÇÃO;;Para a coordenação assinar o Termo de Compromisso de Estágio antes de começar;3
+dispensa de estagio,dispensa do estagio,aproveitamento de estagio,estagio extracurricular;SOLICITAÇÃO DE DISPENSA DE ESTÁGIO CURRICULAR - DIREITO;;Aproveitamento de estágio extracurricular, só no curso de Direito;5
+encerrar,encerramento,baixa,rescisao,rescindir;;Coordenação do curso;O portal não tem categoria para encerrar estágio. A dispensa de estágio serve só para aproveitamento de estágio no curso de Direito e, fora disso, o pedido é indeferido por campo equivocado;5
+reembolso,ressarcimento,estorno;REEMBOLSO TODOS OS NIVEIS;;Devolução de um valor pago que não vai ser usado;5
+dinheiro de volta,devolucao do valor,valor pago;REEMBOLSO TODOS OS NIVEIS;;Devolução de um valor pago que não vai ser usado;3
+historico,historico escolar;HISTÓRICO ESCOLAR - GRADUAÇÃO;;Documento com as disciplinas cursadas e as notas;5
+disciplinas cursadas,boletim;HISTÓRICO ESCOLAR - GRADUAÇÃO;;Documento com as disciplinas cursadas e as notas;3
+comprovante de matricula,comprovar matricula;COMPROVANTE DE MATRÍCULA - GRADUAÇÃO;;Comprova a matrícula ativa para estágio, empresa ou outra instituição;5
+matricula ativa,estou matriculado;COMPROVANTE DE MATRÍCULA - GRADUAÇÃO;;Comprova a matrícula ativa para estágio, empresa ou outra instituição;3
+revisao de prova,revisao da prova,revisao de nota,revisao da nota;REVISÃO DE AVALIAÇÃO;;Pedido para revisar a correção de uma avaliação;5
+nota errada,contestar nota,correcao da prova;REVISÃO DE AVALIAÇÃO;;Pedido para revisar a correção de uma avaliação;3
+atestado medico,doenca,cirurgia,internacao;EXERCÍCIO DOMICILIAR - GRADUAÇÃO;;Atividades feitas em casa quando o aluno não pode ir às aulas por motivo de saúde;5
+gestante,gravidez,licenca maternidade;EXERCÍCIO DOMICILIAR - GRADUAÇÃO;;Atividades feitas em casa durante a gestação ou depois do parto;5
+atividade complementar,atividades complementares,horas complementares;ATIVIDADE COMPLEMENTAR;;Registro das horas de atividades complementares;5
+renovar trancamento,renovar o trancamento,renovar meu trancamento,renovacao do trancamento,renovacao de trancamento;RENOVAÇÃO TRANCAMENTO - GRADUAÇÃO;;Renovação de um trancamento que já existe;6
+reclamacao,reclamar,ouvidoria,denuncia;;Ouvidoria;Reclamação sobre atendimento ou serviço vai para a Ouvidoria, não para requerimento;5
+trancar,trancamento,trancar disciplina;TRANCAMENTO DE MATRÍCULA EM DISCIPLINA;;Trancamento de disciplina no semestre. Depois o Financeiro recalcula as parcelas;5
+deixar de cursar,choque de horario;TRANCAMENTO DE MATRÍCULA EM DISCIPLINA;;Trancamento de disciplina no semestre. Depois o Financeiro recalcula as parcelas;3
+transferencia interna,mudar de curso,trocar de curso,mudanca de curso;TRANSFERÊNCIA INTERNA;;Troca de curso dentro da UCSal. Bolsista ProUni passa por análise da bolsa;5
+transferir de curso,outro curso;TRANSFERÊNCIA INTERNA;;Troca de curso dentro da UCSal. Bolsista ProUni passa por análise da bolsa;3
