@@ -8,13 +8,11 @@
     <div th:replace="~{fragments/layout :: mensagens}"></div>
 
     <article>
-        <!-- Nome exato e botão de copiar -->
         <header>
             <h1 id="nomeCategoria" th:text="${categoria.nomeNoPortal}"></h1>
-            <button onclick="copiarNome()" class="outline" style="width: auto;">Copiar Nome</button>
+            <button type="button" class="outline" onclick="copiarNome()">Copiar nome</button>
         </header>
 
-        <!-- Quando usar e não usar -->
         <div class="grid">
             <div>
                 <h3>Quando usar</h3>
@@ -26,7 +24,6 @@
             </div>
         </div>
 
-        <!-- Checklist de Documentos (Visual) -->
         <h3>Checklist de Documentos</h3>
         <fieldset>
             <label th:each="doc : ${categoria.documentos}">
@@ -37,39 +34,35 @@
             <p th:if="${#lists.isEmpty(categoria.documentos)}">Nenhum documento adicional exigido.</p>
         </fieldset>
 
-        <!-- Setores numerados -->
         <h3>Ordem de Tramitação</h3>
-        <ol>
+        <ol th:unless="${#lists.isEmpty(categoria.setores)}">
             <li th:each="setor : ${categoria.setores}" th:text="${setor.nome}"></li>
         </ol>
+        <p th:if="${#lists.isEmpty(categoria.setores)}">Os setores desta categoria ainda não foram levantados.</p>
 
-        <!-- Avisos e Efeitos (Polimorfismo aplicado no alertasDoGrupo) -->
         <h3>Avisos e Efeitos</h3>
-        <div style="padding: 1rem; border-left: 4px solid #f59e0b; background-color: #fef3c7; color: #92400e; margin-bottom: 1.5rem;">
-            <p th:text="${categoria.efeitos}"></p>
+        <div class="aviso aviso-atencao">
+            <p th:if="${categoria.efeitos}" th:text="${categoria.efeitos}"></p>
             <ul>
                 <li th:each="alerta : ${categoria.alertasDoGrupo()}" th:text="${alerta}"></li>
             </ul>
         </div>
 
-        <!-- Prazo (Substituído na Tarefa #18) -->
-        <div style="padding: 1rem; background: #e0f2fe; color: #0369a1; border-radius: 8px;">
+        <div class="aviso aviso-info">
             <strong>Prazo de referência:</strong> em breve
         </div>
 
-        <!-- Data de Revisão -->
-        <footer style="margin-top: 2rem;">
+        <footer>
             <small>Revisado em <span th:text="${#temporals.format(categoria.dataRevisao, 'dd/MM/yyyy')}"></span></small>
         </footer>
     </article>
 
-    <a href="/categorias" role="button" class="secondary">Voltar para a lista</a>
+    <a th:href="@{/categorias}" role="button" class="secondary">Voltar para a lista</a>
 
   </main>
 
   <footer th:replace="~{fragments/layout :: rodape}"></footer>
 
-  <!-- Script para o botão de copiar -->
   <script>
     function copiarNome() {
         var texto = document.getElementById("nomeCategoria").innerText;
