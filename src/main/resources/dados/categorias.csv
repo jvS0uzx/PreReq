@@ -39,7 +39,9 @@ PERCENTUAL DE CARGA HORÁRIA - GRADUAÇÃO;DOCUMENTAL;A CONFIRMAR;A CONFIRMAR;A 
 PROGRAMAS DE DISCIPLINAS - GRADUAÇÃO;DOCUMENTAL;A CONFIRMAR;A CONFIRMAR;A CONFIRMAR;A CONFIRMAR;;
 RENOVAÇÃO TRANCAMENTO - GRADUAÇÃO;ACADEMICO;A CONFIRMAR;A CONFIRMAR;A CONFIRMAR;A CONFIRMAR;;
 REQUERIMENTO DE ADESÃO, MANUTENÇÃO, ENTREGA DE DOCUMENTAÇÃO E CANCELAMENTO DO FIES;FINANCEIRO;A CONFIRMAR;A CONFIRMAR;A CONFIRMAR;A CONFIRMAR;;
-SOLICITAÇÃO DE DISPENSA DE ESTÁGIO CURRICULAR - DIREITO;ESTAGIO;Dispensa do estágio curricular, só para o curso de Direito;Quando você é do curso de Direito e quer pedir dispensa do estágio curricular;Fora do curso de Direito o pedido é indeferido por campo equivocado. Também não serve para encerrar um estágio;A CONFIRMAR;;
+SOLICITAÇÃO DE DISPENSA DE ESTÁGIO CURRICULAR - DIREITO;ESTAGIO;Aproveitamento de estágio extracurricular nas disciplinas de Estágio Supervisionado do curso de Direito;Quando você é do curso de Direito e quer aproveitar um estágio extracurricular no Estágio Supervisionado;Fora do curso de Direito ou para encerrar um estágio. Nesses casos o pedido é indeferido por campo equivocado;A CONFIRMAR;;
 SOLICITAÇÃO DE IMAGEM DAS CÂMERAS;DOCUMENTAL;A CONFIRMAR;A CONFIRMAR;A CONFIRMAR;A CONFIRMAR;;
 TRANSFERÊNCIA EXTERNA;ACADEMICO;A CONFIRMAR;A CONFIRMAR;A CONFIRMAR;A CONFIRMAR;;
 VALIDAÇÃO DE DIPLOMA DA UCSAL PARA INSTITUIÇÕES INTERNACIONAIS;DOCUMENTAL;A CONFIRMAR;A CONFIRMAR;A CONFIRMAR;A CONFIRMAR;;
+TRANCAMENTO DE MATRÍCULA EM DISCIPLINA;ACADEMICO;Trancamento de uma disciplina no semestre;Quando quer deixar de cursar uma disciplina no semestre atual;A CONFIRMAR;Depois do Registro Acadêmico o pedido passa pelo Financeiro, que recalcula as parcelas. Essa etapa pode levar semanas;;Registro Acadêmico|Financeiro
+TRANSFERÊNCIA INTERNA;ACADEMICO;Mudança de curso dentro da UCSal;Quando quer trocar de curso sem sair da UCSal;Para ir para outra instituição;Bolsista ProUni passa por análise da bolsa. Depois de deferida, é preciso acessar a matrícula e ajustar as disciplinas;;Registro Acadêmico
