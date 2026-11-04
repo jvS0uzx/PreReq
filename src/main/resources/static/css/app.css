@@ -20,3 +20,13 @@ nav ul {
     border-color: var(--pico-del-color);
     background-color: color-mix(in srgb, var(--pico-del-color) 12%, transparent);
 }
+
+.aviso-atencao {
+    border-color: var(--pico-mark-background-color);
+    background-color: color-mix(in srgb, var(--pico-mark-background-color) 25%, transparent);
+}
+
+.aviso-info {
+    border-color: var(--pico-primary);
+    background-color: color-mix(in srgb, var(--pico-primary) 10%, transparent);
+}

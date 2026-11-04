@@ -58,6 +58,17 @@ class TipoRequerimentoRepositoryTest {
                 .containsExactly("Declaração de vínculo", "Trancamento de matrícula");
     }
 
+    @Test
+    void deveIgnorarInativasQuandoBuscarAtivasPorNome() {
+        salvar("Trancamento de matrícula", true);
+        salvar("Trancamento antigo", false);
+
+        List<TipoRequerimento> encontradas = repository.findByAtivoTrueAndNomeNoPortalContainingIgnoreCase("trancamento");
+
+        assertThat(encontradas).extracting(TipoRequerimento::getNomeNoPortal)
+                .containsExactly("Trancamento de matrícula");
+    }
+
     private void salvar(String nomeNoPortal, boolean ativo) {
         TipoRequerimento tipo = TipoRequerimento.novo(GrupoRequerimento.DOCUMENTAL);
         tipo.setNomeNoPortal(nomeNoPortal);
