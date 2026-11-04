@@ -15,8 +15,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class CategoriaServiceTest {
@@ -37,7 +41,7 @@ class CategoriaServiceTest {
     }
 
     @Test
-    void deveListarAtivasPorGrupo() {
+    void deveAgruparPorGrupoQuandoListarAtivas() {
         when(repository.findByAtivoTrueOrderByNomeNoPortal()).thenReturn(List.of(categoriaMock));
 
         Map<GrupoRequerimento, List<TipoRequerimento>> resultado = service.listarAtivasPorGrupo();
@@ -48,7 +52,18 @@ class CategoriaServiceTest {
     }
 
     @Test
-    void deveBuscarPorNome() {
+    void deveManterAOrdemDoEnumQuandoListarAtivas() {
+        TipoRequerimento documental = TipoRequerimento.novo(GrupoRequerimento.DOCUMENTAL);
+        documental.setNomeNoPortal("Declaração de vínculo");
+        when(repository.findByAtivoTrueOrderByNomeNoPortal()).thenReturn(List.of(documental, categoriaMock));
+
+        Map<GrupoRequerimento, List<TipoRequerimento>> resultado = service.listarAtivasPorGrupo();
+
+        assertEquals(List.of(GrupoRequerimento.ACADEMICO, GrupoRequerimento.DOCUMENTAL), List.copyOf(resultado.keySet()));
+    }
+
+    @Test
+    void deveDevolverAtivasQuandoBuscarPorNome() {
         when(repository.findByAtivoTrueAndNomeNoPortalContainingIgnoreCase("histórico"))
                 .thenReturn(List.of(categoriaMock));
 
@@ -59,7 +74,7 @@ class CategoriaServiceTest {
     }
 
     @Test
-    void deveBuscarPorIdComSucesso() {
+    void deveDevolverCategoriaQuandoIdExistir() {
         when(repository.findById(1L)).thenReturn(Optional.of(categoriaMock));
 
         TipoRequerimento resultado = service.buscar(1L);
@@ -69,7 +84,7 @@ class CategoriaServiceTest {
     }
 
     @Test
-    void deveLancarExcecaoQuandoIdNaoExistir() {
+    void deveLancarRecursoNaoEncontradoQuandoIdNaoExistir() {
         when(repository.findById(999999L)).thenReturn(Optional.empty());
 
         assertThrows(RecursoNaoEncontradoException.class, () -> service.buscar(999999L));
