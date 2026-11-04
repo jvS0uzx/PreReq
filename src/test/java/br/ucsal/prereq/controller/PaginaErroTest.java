@@ -30,4 +30,18 @@ class PaginaErroTest {
         assertThat(resposta.statusCode()).isEqualTo(404);
         assertThat(resposta.body()).contains("Erro 404");
     }
+
+    @Test
+    void deveExibirPagina4xxQuandoParametroDaRotaForInvalido() throws Exception {
+        HttpRequest requisicao = HttpRequest.newBuilder()
+                .uri(URI.create("http://localhost:" + porta + "/categorias/abc"))
+                .header("Accept", "text/html")
+                .build();
+
+        HttpResponse<String> resposta = HttpClient.newHttpClient()
+                .send(requisicao, HttpResponse.BodyHandlers.ofString());
+
+        assertThat(resposta.statusCode()).isEqualTo(400);
+        assertThat(resposta.body()).contains("Erro 400").doesNotContain("Whitelabel");
+    }
 }
