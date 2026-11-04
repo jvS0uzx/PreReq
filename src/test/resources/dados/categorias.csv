@@ -1,0 +1,4 @@
+nome_no_portal;grupo;descricao;quando_usar;quando_nao_usar;efeitos;documentos;setores
+ASSINATURA DE CONTRATO DE ESTÁGIO - GRADUAÇÃO;ESTAGIO;Pedido para que a coordenação assine o TCE;Quando o TCE já estiver preenchido;Para encerrar um estágio;TCE assinado devolvido ao aluno;Termo de Compromisso de Estágio (TCE);Coordenação do curso
+REEMBOLSO TODOS OS NIVEIS;FINANCEIRO;Devolução de valor pago pelo aluno;Quando pagou um valor que não será usado;A CONFIRMAR;Pedido analisado pelo Contas a Receber;Formulário de reembolso assinado;Contas a Receber|Coordenação do curso
+HISTÓRICO ESCOLAR - GRADUAÇÃO;DOCUMENTAL;A CONFIRMAR;A CONFIRMAR;A CONFIRMAR;A CONFIRMAR;;Secretaria Geral
