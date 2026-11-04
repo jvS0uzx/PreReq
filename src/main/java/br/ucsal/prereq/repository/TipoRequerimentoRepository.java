@@ -13,5 +13,5 @@ public interface TipoRequerimentoRepository extends JpaRepository<TipoRequerimen
 
     Optional<TipoRequerimento> findByNomeNoPortal(String nomeNoPortal);
 
-    List<TipoRequerimento> findByNomeNoPortalContainingIgnoreCase(String q);
+    List<TipoRequerimento> findByAtivoTrueAndNomeNoPortalContainingIgnoreCase(String nomeNoPortal);
 }

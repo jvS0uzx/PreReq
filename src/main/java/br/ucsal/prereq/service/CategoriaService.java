@@ -31,8 +31,7 @@ public class CategoriaService {
     }
 
     public List<TipoRequerimento> buscarPorNome(String q) {
-        // Usa o método que acabamos de adicionar no repositório
-        return repository.findByNomeNoPortalContainingIgnoreCase(q);
+        return repository.findByAtivoTrueAndNomeNoPortalContainingIgnoreCase(q);
     }
 
     public TipoRequerimento buscar(Long id) {

@@ -49,7 +49,7 @@ class CategoriaServiceTest {
 
     @Test
     void deveBuscarPorNome() {
-        when(repository.findByNomeNoPortalContainingIgnoreCase("histórico"))
+        when(repository.findByAtivoTrueAndNomeNoPortalContainingIgnoreCase("histórico"))
                 .thenReturn(List.of(categoriaMock));
 
         List<TipoRequerimento> resultado = service.buscarPorNome("histórico");
