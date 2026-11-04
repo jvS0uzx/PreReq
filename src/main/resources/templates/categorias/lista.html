@@ -30,7 +30,7 @@
     <!-- Exibição agrupada padrão (quando não há pesquisa) -->
     <div th:if="${termoBusca == null}">
         <div th:each="entry : ${categoriasAgrupadas}">
-            <h2 th:text="${entry.key}"></h2>
+            <h2 th:text="${entry.key.rotulo}"></h2>
             <ul>
                 <li th:each="cat : ${entry.value}">
                     <a th:href="@{/categorias/{id}(id=${cat.id})}" th:text="${cat.nomeNoPortal}"></a>

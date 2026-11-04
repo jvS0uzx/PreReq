@@ -7,6 +7,7 @@ import br.ucsal.prereq.repository.TipoRequerimentoRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -22,12 +23,9 @@ public class CategoriaService {
     }
 
     public Map<GrupoRequerimento, List<TipoRequerimento>> listarAtivasPorGrupo() {
-        // Usa o método do P1 para buscar apenas as ativas e já ordenadas
-        List<TipoRequerimento> ativas = repository.findByAtivoTrueOrderByNomeNoPortal();
-
-        // Agrupa usando o método getGrupo() correto da entidade
-        return ativas.stream()
-                .collect(Collectors.groupingBy(TipoRequerimento::getGrupo));
+        return repository.findByAtivoTrueOrderByNomeNoPortal().stream()
+                .collect(Collectors.groupingBy(TipoRequerimento::getGrupo,
+                        () -> new EnumMap<>(GrupoRequerimento.class), Collectors.toList()));
     }
 
     public List<TipoRequerimento> buscarPorNome(String q) {
