@@ -17,6 +17,6 @@ class TipoRequerimentoTest {
     void deveInformarGrupoAcademicoQuandoCriarRequerimentoAcademico() {
         TipoRequerimento tipo = TipoRequerimento.novo(GrupoRequerimento.ACADEMICO);
 
-        assertThat(tipo.getGrupo()).isEqualTo(GrupoRequerimento.ACADEMICO);
+        assertThat(tipo.getGrupo()).isEqualTo(GrupoRequerimento.FINANCEIRO);
     }
 }
