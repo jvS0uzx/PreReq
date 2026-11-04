@@ -5,12 +5,14 @@ import br.ucsal.prereq.model.GrupoRequerimento;
 import br.ucsal.prereq.model.TipoRequerimento;
 import br.ucsal.prereq.repository.TipoRequerimentoRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional(readOnly = true)
 public class CategoriaService {
 
     private final TipoRequerimentoRepository repository;
@@ -34,7 +36,10 @@ public class CategoriaService {
     }
 
     public TipoRequerimento buscar(Long id) {
-        return repository.findById(id)
+        TipoRequerimento categoria = repository.findById(id)
                 .orElseThrow(() -> new RecursoNaoEncontradoException("Categoria não encontrada com o ID: " + id));
+        categoria.getDocumentos().size();
+        categoria.getSetores().size();
+        return categoria;
     }
 }
