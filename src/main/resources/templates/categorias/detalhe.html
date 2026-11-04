@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Detalhe da Categoria')}"></head>
+<body>
+  <header th:replace="~{fragments/layout :: menu}"></header>
+
+  <main class="container">
+    <div th:replace="~{fragments/layout :: mensagens}"></div>
+
+    <article>
+        <!-- Nome exato e botão de copiar -->
+        <header>
+            <h1 id="nomeCategoria" th:text="${categoria.nomeNoPortal}"></h1>
+            <button onclick="copiarNome()" class="outline" style="width: auto;">Copiar Nome</button>
+        </header>
+
+        <!-- Quando usar e não usar -->
+        <div class="grid">
+            <div>
+                <h3>Quando usar</h3>
+                <p th:text="${categoria.quandoUsar}"></p>
+            </div>
+            <div>
+                <h3>Quando não usar</h3>
+                <p th:text="${categoria.quandoNaoUsar}"></p>
+            </div>
+        </div>
+
+        <!-- Checklist de Documentos (Visual) -->
+        <h3>Checklist de Documentos</h3>
+        <fieldset>
+            <label th:each="doc : ${categoria.documentos}">
+                <input type="checkbox">
+                <span th:text="${doc.nome}"></span>
+                <small th:if="${doc.ondeConseguir}" th:text="'(Onde conseguir: ' + ${doc.ondeConseguir} + ')'"></small>
+            </label>
+            <p th:if="${#lists.isEmpty(categoria.documentos)}">Nenhum documento adicional exigido.</p>
+        </fieldset>
+
+        <!-- Setores numerados -->
+        <h3>Ordem de Tramitação</h3>
+        <ol>
+            <li th:each="setor : ${categoria.setores}" th:text="${setor.nome}"></li>
+        </ol>
+
+        <!-- Avisos e Efeitos (Polimorfismo aplicado no alertasDoGrupo) -->
+        <h3>Avisos e Efeitos</h3>
+        <div style="padding: 1rem; border-left: 4px solid #f59e0b; background-color: #fef3c7; color: #92400e; margin-bottom: 1.5rem;">
+            <p th:text="${categoria.efeitos}"></p>
+            <ul>
+                <li th:each="alerta : ${categoria.alertasDoGrupo()}" th:text="${alerta}"></li>
+            </ul>
+        </div>
+
+        <!-- Prazo (Substituído na Tarefa #18) -->
+        <div style="padding: 1rem; background: #e0f2fe; color: #0369a1; border-radius: 8px;">
+            <strong>Prazo de referência:</strong> em breve
+        </div>
+
+        <!-- Data de Revisão -->
+        <footer style="margin-top: 2rem;">
+            <small>Revisado em <span th:text="${#temporals.format(categoria.dataRevisao, 'dd/MM/yyyy')}"></span></small>
+        </footer>
+    </article>
+
+    <a href="/categorias" role="button" class="secondary">Voltar para a lista</a>
+
+  </main>
+
+  <footer th:replace="~{fragments/layout :: rodape}"></footer>
+
+  <!-- Script para o botão de copiar -->
+  <script>
+    function copiarNome() {
+        var texto = document.getElementById("nomeCategoria").innerText;
+        navigator.clipboard.writeText(texto).then(function() {
+            alert("Nome exato copiado para a área de transferência!");
+        });
+    }
+  </script>
+</body>
+</html>

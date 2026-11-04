@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Categorias de Requerimento')}"></head>
+<body>
+  <header th:replace="~{fragments/layout :: menu}"></header>
+
+  <main class="container">
+    <div th:replace="~{fragments/layout :: mensagens}"></div>
+
+    <h1>Categorias de Requerimento</h1>
+
+    <!-- Campo de pesquisa -->
+    <form action="/categorias" method="get" style="margin-bottom: 2rem;">
+        <input type="search" name="q" th:value="${termoBusca}" placeholder="Pesquisar categoria..." aria-label="Pesquisar">
+        <button type="submit" style="width: auto;">Buscar</button>
+    </form>
+
+    <!-- Exibição quando há uma pesquisa ativa -->
+    <div th:if="${termoBusca != null}">
+        <h2>Resultados para: <span th:text="${termoBusca}"></span></h2>
+        <ul>
+            <li th:each="cat : ${categoriasBusca}">
+                <a th:href="@{/categorias/{id}(id=${cat.id})}" th:text="${cat.nomeNoPortal}"></a>
+            </li>
+        </ul>
+        <p th:if="${#lists.isEmpty(categoriasBusca)}">Nenhuma categoria encontrada com esse nome.</p>
+        <a href="/categorias" role="button" class="outline">Limpar busca</a>
+    </div>
+
+    <!-- Exibição agrupada padrão (quando não há pesquisa) -->
+    <div th:if="${termoBusca == null}">
+        <div th:each="entry : ${categoriasAgrupadas}">
+            <h2 th:text="${entry.key}"></h2>
+            <ul>
+                <li th:each="cat : ${entry.value}">
+                    <a th:href="@{/categorias/{id}(id=${cat.id})}" th:text="${cat.nomeNoPortal}"></a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+  </main>
+
+  <footer th:replace="~{fragments/layout :: rodape}"></footer>
+</body>
+</html>
