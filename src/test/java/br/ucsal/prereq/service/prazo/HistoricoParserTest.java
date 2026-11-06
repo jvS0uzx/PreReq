@@ -25,7 +25,7 @@ class HistoricoParserTest {
     }
 
     @Test
-    void ProcessarAmostra01EncerradoSemSetores() throws Exception {
+    void deveProcessarAmostra01EncerradoSemSetores() throws Exception {
         String texto = carregarAmostra("amostra-01.txt");
 
         ResultadoLeitura resultado = HistoricoParser.ler(texto);
@@ -36,7 +36,7 @@ class HistoricoParserTest {
     }
 
     @Test
-    void ProcessarAmostra02AcademicoDeferido() throws Exception {
+    void deveProcessarAmostra02AcademicoDeferido() throws Exception {
         String texto = carregarAmostra("amostra-02.txt");
 
         ResultadoLeitura resultado = HistoricoParser.ler(texto);
@@ -59,7 +59,7 @@ class HistoricoParserTest {
     }
 
     @Test
-    void ProcessarAmostra03AcademicoIndeferido() throws Exception {
+    void deveProcessarAmostra03AcademicoIndeferido() throws Exception {
         String texto = carregarAmostra("amostra-03.txt");
 
         ResultadoLeitura resultado = HistoricoParser.ler(texto);
@@ -82,7 +82,7 @@ class HistoricoParserTest {
     }
 
     @Test
-    void ProcessarAmostra04FinanceiroDeferido() throws Exception {
+    void deveProcessarAmostra04FinanceiroDeferido() throws Exception {
         String texto = carregarAmostra("amostra-04.txt");
 
         ResultadoLeitura resultado = HistoricoParser.ler(texto);
@@ -105,7 +105,7 @@ class HistoricoParserTest {
     }
 
     @Test
-    void ProcessarAmostra05FinanceiroComBolsaIndeferido() throws Exception {
+    void deveProcessarAmostra05FinanceiroComBolsaIndeferido() throws Exception {
         String texto = carregarAmostra("amostra-05.txt");
 
         ResultadoLeitura resultado = HistoricoParser.ler(texto);
@@ -134,7 +134,7 @@ class HistoricoParserTest {
     }
 
     @Test
-    void ProcessarAmostra06EstagioDeferido() throws Exception {
+    void deveProcessarAmostra06EstagioDeferido() throws Exception {
         String texto = carregarAmostra("amostra-06.txt");
 
         ResultadoLeitura resultado = HistoricoParser.ler(texto);
@@ -157,7 +157,7 @@ class HistoricoParserTest {
     }
 
     @Test
-    void LancarExcecaoQuandoTextoForNulo() {
+    void deveLancarExcecaoQuandoTextoForNulo() {
         RegraNegocioException ex = assertThrows(
                 RegraNegocioException.class,
                 () -> HistoricoParser.ler(null)
@@ -166,7 +166,7 @@ class HistoricoParserTest {
     }
 
     @Test
-    void LancarExcecaoQuandoTextoForVazio() {
+    void deveLancarExcecaoQuandoTextoForVazio() {
         RegraNegocioException ex = assertThrows(
                 RegraNegocioException.class,
                 () -> HistoricoParser.ler("   ")
@@ -175,7 +175,7 @@ class HistoricoParserTest {
     }
 
     @Test
-    void LancarExcecaoQuandoTextoNaoPossuirDatas() {
+    void deveLancarExcecaoQuandoTextoNaoPossuirDatas() {
         String textoInvalido = """
                 Histórico de etapas
                 ABERTURA DO ATENDIMENTO
