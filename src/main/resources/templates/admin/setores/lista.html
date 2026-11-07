@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Setores')}"></head>
+<body>
+    <header th:replace="~{fragments/layout :: menu}"></header>
+
+    <main class="container">
+        <div th:replace="~{fragments/layout :: mensagens}"></div>
+
+        <h1>Setores</h1>
+
+        <p>
+            <a th:href="@{/admin/setores/novo}" role="button">Novo setor</a>
+            <a th:href="@{/admin}" role="button" class="secondary outline">Voltar</a>
+        </p>
+
+        <p th:if="${#lists.isEmpty(setores)}">Nenhum setor cadastrado.</p>
+
+        <table th:unless="${#lists.isEmpty(setores)}">
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Descrição</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="setor : ${setores}">
+                    <td th:text="${setor.nome}"></td>
+                    <td th:text="${setor.descricao}"></td>
+                    <td>
+                        <a th:href="@{/admin/setores/{id}/editar(id=${setor.id})}">Editar</a>
+                        <form th:action="@{/admin/setores/{id}/excluir(id=${setor.id})}" method="post">
+                            <button type="submit" class="secondary outline">Excluir</button>
+                        </form>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </main>
+
+    <footer th:replace="~{fragments/layout :: rodape}"></footer>
+</body>
+</html>
