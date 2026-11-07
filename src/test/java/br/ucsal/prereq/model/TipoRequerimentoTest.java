@@ -1,12 +1,27 @@
 package br.ucsal.prereq.model;
 
 import br.ucsal.prereq.dto.DadosSolicitacao;
-import org.junit.jupiter.api.Test;
-
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.Test;
 
 class TipoRequerimentoTest {
 
+    // --- TESTES ORIGINAIS (QUE FALTAVAM) ---
+    @Test
+    void deveCriarRequerimentoFinanceiroQuandoGrupoForFinanceiro() {
+        TipoRequerimento tipo = TipoRequerimento.novo(GrupoRequerimento.FINANCEIRO);
+        assertThat(tipo).isInstanceOf(RequerimentoFinanceiro.class);
+    }
+
+    @Test
+    void deveInformarGrupoAcademicoQuandoCriarRequerimentoAcademico() {
+        TipoRequerimento tipo = TipoRequerimento.novo(GrupoRequerimento.ACADEMICO);
+        assertThat(tipo.getGrupo()).isEqualTo(GrupoRequerimento.ACADEMICO);
+    }
+
+    // --- SEUS TESTES NOVOS (DA PR) ---
     @Test
     void deveGerarTextoPadraoParaDocumental() {
         TipoRequerimento req = TipoRequerimento.novo(GrupoRequerimento.DOCUMENTAL);

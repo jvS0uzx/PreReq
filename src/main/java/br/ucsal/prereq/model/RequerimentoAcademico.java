@@ -24,9 +24,10 @@ public class RequerimentoAcademico extends TipoRequerimento {
     }
 
     @Override
-    public String montarModeloTexto(DadosSolicitacao d) {
-        String textoBase = super.montarModeloTexto(d);
-        String regraAcademico = "Disciplina relacionada: " + d.getDisciplina() + "\n\nAtenciosamente,";
-        return textoBase.replace("Atenciosamente,", regraAcademico);
+    protected String obterRegraEspecifica(DadosSolicitacao d) {
+        if (d.getDisciplina() != null && !d.getDisciplina().trim().isEmpty()) {
+            return "Disciplina relacionada: " + d.getDisciplina();
+        }
+        return "";
     }
 }

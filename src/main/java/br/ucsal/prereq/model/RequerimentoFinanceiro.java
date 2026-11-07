@@ -24,9 +24,7 @@ public class RequerimentoFinanceiro extends TipoRequerimento {
     }
 
     @Override
-    public String montarModeloTexto(DadosSolicitacao d) {
-        String textoBase = super.montarModeloTexto(d);
-        String regraFinanceiro = "Declaro estar ciente de que o processamento deste requerimento pode gerar recálculo de parcelas.\n\nAtenciosamente,";
-        return textoBase.replace("Atenciosamente,", regraFinanceiro);
+    protected String obterRegraEspecifica(DadosSolicitacao d) {
+        return "Declaro estar ciente de que o processamento deste requerimento pode gerar recálculo de parcelas.";
     }
 }

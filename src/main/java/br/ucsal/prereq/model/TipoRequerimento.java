@@ -154,10 +154,10 @@ public abstract class TipoRequerimento {
         this.setores.clear();
         this.setores.addAll(setores);
     }
+
     public String montarModeloTexto(DadosSolicitacao d) {
         StringBuilder texto = new StringBuilder();
         texto.append("Prezados,\n\n");
-
         texto.append("Venho por meio deste solicitar ").append(this.nomeNoPortal).append(".\n\n");
         texto.append("Motivo: ").append(d.getMotivo()).append("\n\n");
 
@@ -169,10 +169,19 @@ public abstract class TipoRequerimento {
             texto.append("\n");
         }
 
+        String regraEspecifica = obterRegraEspecifica(d);
+        if (regraEspecifica != null && !regraEspecifica.isBlank()) {
+            texto.append(regraEspecifica).append("\n\n");
+        }
+
         texto.append("Atenciosamente,\n");
         texto.append("Aluno(a) do curso de ").append(d.getCurso())
              .append(", semestre ").append(d.getSemestre()).append(".");
 
         return texto.toString();
+    }
+
+    protected String obterRegraEspecifica(DadosSolicitacao d) {
+        return "";
     }
 }

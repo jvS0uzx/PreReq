@@ -24,10 +24,12 @@ public class RequerimentoEstagio extends TipoRequerimento {
     }
 
     @Override
-    public String montarModeloTexto(DadosSolicitacao d) {
-        String textoBase = super.montarModeloTexto(d);
-        String regraEstagio = "Empresa concedente: " + d.getEmpresaEstagio() + "\n" +
-                              "Solicito também a baixa de eventuais estágios anteriores (se aplicável).\n\nAtenciosamente,";
-        return textoBase.replace("Atenciosamente,", regraEstagio);
+    protected String obterRegraEspecifica(DadosSolicitacao d) {
+        StringBuilder regra = new StringBuilder();
+        if (d.getEmpresaEstagio() != null && !d.getEmpresaEstagio().trim().isEmpty()) {
+            regra.append("Empresa concedente: ").append(d.getEmpresaEstagio()).append("\n");
+        }
+        regra.append("Solicito também a baixa de eventuais estágios anteriores (se aplicável).");
+        return regra.toString().trim();
     }
 }
