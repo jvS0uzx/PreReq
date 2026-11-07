@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Documentos')}"></head>
+<body>
+    <header th:replace="~{fragments/layout :: menu}"></header>
+
+    <main class="container">
+        <div th:replace="~{fragments/layout :: mensagens}"></div>
+
+        <h1>Documentos</h1>
+
+        <p>
+            <a th:href="@{/admin/documentos/novo}" role="button">Novo documento</a>
+            <a th:href="@{/admin}" role="button" class="secondary outline">Voltar</a>
+        </p>
+
+        <p th:if="${#lists.isEmpty(documentos)}">Nenhum documento cadastrado.</p>
+
+        <table th:unless="${#lists.isEmpty(documentos)}">
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Descrição</th>
+                    <th>Onde conseguir</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="documento : ${documentos}">
+                    <td th:text="${documento.nome}"></td>
+                    <td th:text="${documento.descricao}"></td>
+                    <td th:text="${documento.ondeConseguir}"></td>
+                    <td>
+                        <a th:href="@{/admin/documentos/{id}/editar(id=${documento.id})}">Editar</a>
+                        <form th:action="@{/admin/documentos/{id}/excluir(id=${documento.id})}" method="post">
+                            <button type="submit" class="secondary outline">Excluir</button>
+                        </form>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </main>
+
+    <footer th:replace="~{fragments/layout :: rodape}"></footer>
+</body>
+</html>
