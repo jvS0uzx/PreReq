@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Setor')}"></head>
+<body>
+    <header th:replace="~{fragments/layout :: menu}"></header>
+
+    <main class="container">
+        <div th:replace="~{fragments/layout :: mensagens}"></div>
+
+        <h1 th:text="${form.id == null} ? 'Novo setor' : 'Editar setor'">Setor</h1>
+
+        <form th:action="@{/admin/setores}" th:object="${form}" method="post">
+            <input type="hidden" th:field="*{id}">
+
+            <label for="nome">Nome</label>
+            <input type="text" id="nome" th:field="*{nome}" th:aria-invalid="${#fields.hasErrors('nome')} ? 'true'" required>
+            <small th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}"></small>
+
+            <label for="descricao">Descrição</label>
+            <textarea id="descricao" th:field="*{descricao}" th:aria-invalid="${#fields.hasErrors('descricao')} ? 'true'"></textarea>
+            <small th:if="${#fields.hasErrors('descricao')}" th:errors="*{descricao}"></small>
+
+            <button type="submit">Salvar</button>
+            <a th:href="@{/admin/setores}" role="button" class="secondary outline">Cancelar</a>
+        </form>
+
+        <p><a th:href="@{/admin}">Voltar para a administração</a></p>
+    </main>
+
+    <footer th:replace="~{fragments/layout :: rodape}"></footer>
+</body>
+</html>

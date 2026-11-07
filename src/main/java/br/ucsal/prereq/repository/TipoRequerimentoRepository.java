@@ -5,6 +5,8 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import br.ucsal.prereq.model.Documento;
+import br.ucsal.prereq.model.Setor;
 import br.ucsal.prereq.model.TipoRequerimento;
 
 public interface TipoRequerimentoRepository extends JpaRepository<TipoRequerimento, Long> {
@@ -14,4 +16,8 @@ public interface TipoRequerimentoRepository extends JpaRepository<TipoRequerimen
     Optional<TipoRequerimento> findByNomeNoPortal(String nomeNoPortal);
 
     List<TipoRequerimento> findByAtivoTrueAndNomeNoPortalContainingIgnoreCase(String nomeNoPortal);
+
+    List<TipoRequerimento> findBySetoresContaining(Setor setor);
+
+    List<TipoRequerimento> findByDocumentosContaining(Documento documento);
 }
