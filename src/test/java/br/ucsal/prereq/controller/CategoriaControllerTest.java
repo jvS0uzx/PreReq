@@ -74,13 +74,12 @@ class CategoriaControllerTest {
                 .andExpect(status().isNotFound());
     }
 
-    // NOVOS TESTES: TAREFA #12
     @Test
     void deveRetornarTextoGeradoQuandoFormularioForValido() throws Exception {
         when(service.buscar(1L)).thenReturn(categoria("HISTÓRICO ESCOLAR - GRADUAÇÃO"));
 
         mockMvc.perform(post("/categorias/1/modelo")
-                        .with(csrf()) // Necessário pois o Spring Security está ativo
+                        .with(csrf())
                         .param("curso", "Engenharia de Software")
                         .param("semestre", "2026.2")
                         .param("motivo", "Preciso para o estágio"))
@@ -96,7 +95,7 @@ class CategoriaControllerTest {
 
         mockMvc.perform(post("/categorias/1/modelo")
                         .with(csrf())
-                        .param("curso", "") // Campo obrigatório vazio para forçar o erro
+                        .param("curso", "")
                         .param("semestre", "2026.2")
                         .param("motivo", "Teste"))
                 .andExpect(status().isOk())

@@ -1,29 +1,30 @@
 package br.ucsal.prereq.model;
 
-import br.ucsal.prereq.dto.DadosSolicitacao;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
+import br.ucsal.prereq.dto.DadosSolicitacao;
+
 class TipoRequerimentoTest {
 
-    // --- TESTES ORIGINAIS (QUE FALTAVAM) ---
     @Test
     void deveCriarRequerimentoFinanceiroQuandoGrupoForFinanceiro() {
         TipoRequerimento tipo = TipoRequerimento.novo(GrupoRequerimento.FINANCEIRO);
+
         assertThat(tipo).isInstanceOf(RequerimentoFinanceiro.class);
     }
 
     @Test
     void deveInformarGrupoAcademicoQuandoCriarRequerimentoAcademico() {
         TipoRequerimento tipo = TipoRequerimento.novo(GrupoRequerimento.ACADEMICO);
+
         assertThat(tipo.getGrupo()).isEqualTo(GrupoRequerimento.ACADEMICO);
     }
 
-    // --- SEUS TESTES NOVOS (DA PR) ---
     @Test
-    void deveGerarTextoPadraoParaDocumental() {
+    void deveGerarTextoPadraoQuandoCategoriaForDocumental() {
         TipoRequerimento req = TipoRequerimento.novo(GrupoRequerimento.DOCUMENTAL);
         req.setNomeNoPortal("Histórico Escolar");
 
@@ -41,7 +42,7 @@ class TipoRequerimentoTest {
     }
 
     @Test
-    void deveIncluirRegraFinanceiro() {
+    void deveIncluirCienciaDoRecalculoQuandoCategoriaForFinanceira() {
         TipoRequerimento req = TipoRequerimento.novo(GrupoRequerimento.FINANCEIRO);
         req.setNomeNoPortal("Reembolso");
 
@@ -56,7 +57,7 @@ class TipoRequerimentoTest {
     }
 
     @Test
-    void deveIncluirRegraAcademico() {
+    void deveCitarDisciplinaQuandoCategoriaForAcademica() {
         TipoRequerimento req = TipoRequerimento.novo(GrupoRequerimento.ACADEMICO);
         req.setNomeNoPortal("Revisão de Nota");
 
@@ -72,7 +73,7 @@ class TipoRequerimentoTest {
     }
 
     @Test
-    void deveIncluirRegraEstagio() {
+    void deveCitarEmpresaEPedirBaixaQuandoCategoriaForDeEstagio() {
         TipoRequerimento req = TipoRequerimento.novo(GrupoRequerimento.ESTAGIO);
         req.setNomeNoPortal("Assinatura de Contrato");
 
