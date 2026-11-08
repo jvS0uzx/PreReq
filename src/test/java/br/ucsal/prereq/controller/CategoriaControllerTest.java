@@ -18,7 +18,9 @@ import java.util.List;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -70,6 +72,37 @@ class CategoriaControllerTest {
 
         mockMvc.perform(get("/categorias/999999"))
                 .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void deveRetornarTextoGeradoQuandoFormularioForValido() throws Exception {
+        when(service.buscar(1L)).thenReturn(categoria("HISTÓRICO ESCOLAR - GRADUAÇÃO"));
+
+        mockMvc.perform(post("/categorias/1/modelo")
+                        .with(csrf())
+                        .param("curso", "Engenharia de Software")
+                        .param("semestre", "2026.2")
+                        .param("motivo", "Preciso para o estágio"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("categorias/detalhe"))
+                .andExpect(model().attributeExists("textoGerado"))
+                .andExpect(content().string(containsString("Preciso para o estágio")));
+    }
+
+    @Test
+    void deveRetornarErrosDeValidacaoQuandoFormularioForInvalido() throws Exception {
+        when(service.buscar(1L)).thenReturn(categoria("HISTÓRICO ESCOLAR - GRADUAÇÃO"));
+
+        mockMvc.perform(post("/categorias/1/modelo")
+                        .with(csrf())
+                        .param("curso", "")
+                        .param("semestre", "2026.2")
+                        .param("motivo", "Teste"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("categorias/detalhe"))
+                .andExpect(model().hasErrors())
+                .andExpect(model().attributeHasFieldErrors("dadosSolicitacao", "curso"))
+                .andExpect(model().attributeDoesNotExist("textoGerado"));
     }
 
     private TipoRequerimento categoria(String nomeNoPortal) {

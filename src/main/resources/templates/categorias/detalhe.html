@@ -52,6 +52,50 @@
             <strong>Prazo de referência:</strong> em breve
         </div>
 
+        <hr>
+
+        <h3>Gerador de Texto para Solicitação</h3>
+        <p>Preencha os dados básicos para gerar o texto padrão no formato exigido pelo setor.</p>
+
+        <div th:if="${textoGerado != null}" class="texto-gerado">
+            <label for="textoGeradoArea"><strong>Texto Gerado:</strong></label>
+            <textarea id="textoGeradoArea" readonly rows="8" th:text="${textoGerado}"></textarea>
+            <button type="button" onclick="copiarTextoGerado()">Copiar Texto</button>
+        </div>
+
+        <form th:action="@{/categorias/{id}/modelo(id=${categoria.id})}" th:object="${dadosSolicitacao}" method="post">
+            <div class="grid">
+                <div>
+                    <label for="curso">Curso *</label>
+                    <input type="text" id="curso" th:field="*{curso}" th:aria-invalid="${#fields.hasErrors('curso')} ? 'true'" placeholder="Ex: Engenharia de Software" required>
+                    <small th:if="${#fields.hasErrors('curso')}" th:errors="*{curso}"></small>
+                </div>
+                <div>
+                    <label for="semestre">Semestre *</label>
+                    <input type="text" id="semestre" th:field="*{semestre}" th:aria-invalid="${#fields.hasErrors('semestre')} ? 'true'" placeholder="Ex: 2026.2" required>
+                    <small th:if="${#fields.hasErrors('semestre')}" th:errors="*{semestre}"></small>
+                </div>
+            </div>
+
+            <label for="motivo">Motivo *</label>
+            <textarea id="motivo" th:field="*{motivo}" th:aria-invalid="${#fields.hasErrors('motivo')} ? 'true'" placeholder="Descreva brevemente por que está solicitando isto" required rows="3"></textarea>
+            <small th:if="${#fields.hasErrors('motivo')}" th:errors="*{motivo}"></small>
+
+            <div th:if="${categoria.grupo.name() == 'ACADEMICO'}">
+                <label for="disciplina">Disciplina (Opcional)</label>
+                <input type="text" id="disciplina" th:field="*{disciplina}" placeholder="Ex: Sistemas Distribuídos">
+            </div>
+
+            <div th:if="${categoria.grupo.name() == 'ESTAGIO'}">
+                <label for="empresaEstagio">Empresa Concedente (Opcional)</label>
+                <input type="text" id="empresaEstagio" th:field="*{empresaEstagio}" placeholder="Ex: Sebrae Bahia">
+            </div>
+
+            <button type="submit">Gerar Texto Base</button>
+        </form>
+
+        <hr>
+
         <footer>
             <small>Revisado em <span th:text="${#temporals.format(categoria.dataRevisao, 'dd/MM/yyyy')}"></span></small>
         </footer>
@@ -68,6 +112,13 @@
         var texto = document.getElementById("nomeCategoria").innerText;
         navigator.clipboard.writeText(texto).then(function() {
             alert("Nome exato copiado para a área de transferência!");
+        });
+    }
+
+    function copiarTextoGerado() {
+        var texto = document.getElementById("textoGeradoArea").value;
+        navigator.clipboard.writeText(texto).then(function() {
+            alert("Texto copiado! Agora é só colar no portal do aluno.");
         });
     }
   </script>

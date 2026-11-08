@@ -2,6 +2,7 @@ package br.ucsal.prereq.model;
 
 import java.util.List;
 
+import br.ucsal.prereq.dto.DadosSolicitacao;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 
@@ -20,5 +21,10 @@ public class RequerimentoFinanceiro extends TipoRequerimento {
     @Override
     public List<String> alertasDoGrupo() {
         return List.of("O Financeiro pode recalcular suas parcelas; o pedido pode ficar semanas nesse setor.");
+    }
+
+    @Override
+    protected String obterRegraEspecifica(DadosSolicitacao d) {
+        return "Declaro estar ciente de que o processamento deste requerimento pode gerar recálculo de parcelas.";
     }
 }

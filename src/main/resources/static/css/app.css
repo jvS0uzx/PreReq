@@ -30,3 +30,7 @@ nav ul {
     border-color: var(--pico-primary);
     background-color: color-mix(in srgb, var(--pico-primary) 10%, transparent);
 }
+
+.texto-gerado {
+    margin-bottom: calc(var(--pico-spacing) * 2);
+}
