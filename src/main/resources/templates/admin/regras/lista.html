@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Regras de triagem')}"></head>
+<body>
+    <header th:replace="~{fragments/layout :: menu}"></header>
+
+    <main class="container">
+        <div th:replace="~{fragments/layout :: mensagens}"></div>
+
+        <h1>Regras de triagem</h1>
+
+        <p>
+            <a th:href="@{/admin/regras/novo}" role="button">Nova regra</a>
+            <a th:unless="${inativas}" th:href="@{/admin/regras(inativas=true)}" role="button" class="secondary outline">Ver só inativas</a>
+            <a th:if="${inativas}" th:href="@{/admin/regras}" role="button" class="secondary outline">Ver todas</a>
+            <a th:href="@{/admin}" role="button" class="secondary outline">Voltar</a>
+        </p>
+
+        <form th:action="@{/admin/regras/testar}" method="post">
+            <label for="frase">Testar uma frase</label>
+            <input type="text" id="frase" name="frase" th:value="${frase}">
+            <button type="submit" class="secondary">Testar</button>
+        </form>
+
+        <article th:if="${resultado != null}" class="aviso aviso-info">
+            <p th:if="${resultado.regraAplicada != null}">
+                Regra vencedora:
+                <strong th:text="${resultado.regraAplicada.palavrasChave}"></strong>
+            </p>
+            <p th:if="${resultado.categoria != null}">
+                Categoria: <span th:text="${resultado.categoria.nomeNoPortal}"></span>
+            </p>
+            <p th:if="${resultado.canalAlternativo != null}">
+                Canal alternativo: <span th:text="${resultado.canalAlternativo}"></span>
+            </p>
+            <p th:text="${resultado.mensagem}"></p>
+        </article>
+
+        <p th:if="${#lists.isEmpty(regras)}">Nenhuma regra encontrada.</p>
+
+        <table th:unless="${#lists.isEmpty(regras)}">
+            <thead>
+                <tr>
+                    <th>Palavras-chave</th>
+                    <th>Destino</th>
+                    <th>Prioridade</th>
+                    <th>Origem</th>
+                    <th>Revisão</th>
+                    <th>Situação</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="regra : ${regras}">
+                    <td th:text="${regra.palavrasChave}"></td>
+                    <td th:text="${regra.categoria != null} ? ${regra.categoria.nomeNoPortal} : ${regra.canalAlternativo}"></td>
+                    <td th:text="${regra.prioridade}"></td>
+                    <td th:text="${regra.origem}"></td>
+                    <td th:text="${#temporals.format(regra.dataRevisao, 'dd/MM/yyyy')}"></td>
+                    <td th:text="${regra.ativa} ? 'Ativa' : 'Inativa'"></td>
+                    <td>
+                        <a th:href="@{/admin/regras/{id}/editar(id=${regra.id})}">Editar</a>
+                        <form th:if="${regra.ativa}" th:action="@{/admin/regras/{id}/desativar(id=${regra.id})}" method="post">
+                            <button type="submit" class="secondary outline">Desativar</button>
+                        </form>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </main>
+
+    <footer th:replace="~{fragments/layout :: rodape}"></footer>
+</body>
+</html>

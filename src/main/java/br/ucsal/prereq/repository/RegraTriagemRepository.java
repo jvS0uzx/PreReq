@@ -11,4 +11,10 @@ public interface RegraTriagemRepository extends JpaRepository<RegraTriagem, Long
 
     @EntityGraph(attributePaths = "categoria")
     List<RegraTriagem> findByAtivaTrue();
+
+    @EntityGraph(attributePaths = "categoria")
+    List<RegraTriagem> findAllByOrderByPrioridadeDescIdAsc();
+
+    @EntityGraph(attributePaths = "categoria")
+    List<RegraTriagem> findByAtivaFalseOrderByPrioridadeDescIdAsc();
 }
