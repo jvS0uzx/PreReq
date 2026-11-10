@@ -3,6 +3,7 @@ package br.ucsal.prereq.dto;
 import br.ucsal.prereq.model.OrigemRegra;
 import br.ucsal.prereq.model.RegraTriagem;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 public class RegraForm {
@@ -21,7 +22,8 @@ public class RegraForm {
     @Size(max = 2000, message = "A explicação deve ter no máximo 2000 caracteres.")
     private String explicacao;
 
-    private int prioridade;
+    @NotNull(message = "Informe a prioridade.")
+    private Integer prioridade = 0;
 
     private OrigemRegra origem;
 
@@ -80,11 +82,11 @@ public class RegraForm {
         this.explicacao = explicacao;
     }
 
-    public int getPrioridade() {
+    public Integer getPrioridade() {
         return prioridade;
     }
 
-    public void setPrioridade(int prioridade) {
+    public void setPrioridade(Integer prioridade) {
         this.prioridade = prioridade;
     }
 

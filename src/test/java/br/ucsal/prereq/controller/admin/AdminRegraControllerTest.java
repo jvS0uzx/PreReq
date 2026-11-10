@@ -1,6 +1,7 @@
 package br.ucsal.prereq.controller.admin;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -107,6 +108,18 @@ class AdminRegraControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("admin/regras/form"))
                 .andExpect(model().attributeHasFieldErrors("form", "palavrasChave"));
+    }
+
+    @Test
+    @WithMockUser
+    void deveVoltarAoFormComErroQuandoPrioridadeVazia() throws Exception {
+        mockMvc.perform(post("/admin/regras").with(csrf())
+                        .param("palavrasChave", "trancar").param("canalAlternativo", "Ouvidoria")
+                        .param("prioridade", ""))
+                .andExpect(status().isOk())
+                .andExpect(view().name("admin/regras/form"))
+                .andExpect(model().attributeHasFieldErrorCode("form", "prioridade", "NotNull"));
+        verify(service, never()).salvar(any());
     }
 
     @Test

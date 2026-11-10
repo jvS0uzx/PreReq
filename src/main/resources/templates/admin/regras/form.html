@@ -25,7 +25,7 @@
 
             <label for="categoriaId">Categoria</label>
             <select id="categoriaId" th:field="*{categoriaId}">
-                <option value="">Nenhuma — usar canal alternativo</option>
+                <option value="">Nenhuma (usar canal alternativo)</option>
                 <option th:each="c : ${categorias}" th:value="${c.id}" th:text="${c.nomeNoPortal}"></option>
             </select>
 
