@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Resultado da triagem')}"></head>
+<body>
+    <header th:replace="~{fragments/layout :: menu}"></header>
+
+    <main class="container">
+        <div th:replace="~{fragments/layout :: mensagens}"></div>
+
+        <h1>Resultado da triagem</h1>
+        <p>Você descreveu: <em th:text="${descricao}"></em></p>
+
+        <article th:if="${resultado.encontrou}">
+            <h2>No portal, escolha: <strong th:text="${resultado.categoria.nomeNoPortal}"></strong></h2>
+            <p th:if="${resultado.mensagem}" th:text="${resultado.mensagem}"></p>
+            <p th:if="${resultado.regraAplicada?.dataRevisao != null}">
+                Regra revisada em
+                <span th:text="${#temporals.format(resultado.regraAplicada.dataRevisao, 'dd/MM/yyyy')}"></span>.
+            </p>
+            <a th:href="@{/categorias/{id}(id=${resultado.categoria.id})}" role="button">Ver checklist</a>
+        </article>
+
+        <article th:unless="${resultado.encontrou}">
+            <h2>Não encontramos uma categoria no portal</h2>
+            <p th:if="${resultado.canalAlternativo}">
+                Procure: <strong th:text="${resultado.canalAlternativo}"></strong>
+            </p>
+            <p th:if="${resultado.mensagem}" th:text="${resultado.mensagem}"></p>
+            <p th:if="${resultado.regraAplicada?.dataRevisao != null}">
+                Regra revisada em
+                <span th:text="${#temporals.format(resultado.regraAplicada.dataRevisao, 'dd/MM/yyyy')}"></span>.
+            </p>
+        </article>
+
+        <p><a th:href="@{/triagem(descricao=${descricao})}">Não era isso? Descreva de outro jeito</a></p>
+    </main>
+
+    <footer th:replace="~{fragments/layout :: rodape}"></footer>
+</body>
+</html>
