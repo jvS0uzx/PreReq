@@ -1,6 +1,7 @@
 package br.ucsal.prereq.controller.admin;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -100,6 +101,19 @@ class AdminCategoriaControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("admin/categorias/form"))
                 .andExpect(model().attributeHasFieldErrors("form", "nomeNoPortal"));
+    }
+
+    @Test
+    @WithMockUser
+    void deveVoltarAoFormComErroQuandoDoisSetoresTiveremAMesmaOrdem() throws Exception {
+        mockMvc.perform(post("/admin/categorias").with(csrf())
+                        .param("grupo", "ACADEMICO").param("nomeNoPortal", "Trancamento")
+                        .param("setores[0].setorId", "1").param("setores[0].ordem", "1")
+                        .param("setores[1].setorId", "2").param("setores[1].ordem", "1"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("admin/categorias/form"))
+                .andExpect(model().attributeHasFieldErrors("form", "ordensDistintas"));
+        verify(service, never()).salvar(any());
     }
 
     @Test

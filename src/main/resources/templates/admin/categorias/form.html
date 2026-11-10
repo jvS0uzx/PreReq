@@ -66,6 +66,7 @@
                            th:aria-invalid="${#fields.hasErrors('setores[__${st.index}__].ordem')} ? 'true'">
                     <small th:if="${#fields.hasErrors('setores[__${st.index}__].ordem')}" th:errors="*{setores[__${st.index}__].ordem}"></small>
                 </div>
+                <small th:if="${#fields.hasErrors('ordensDistintas')}" th:errors="*{ordensDistintas}"></small>
             </fieldset>
 
             <button type="submit">Salvar</button>
