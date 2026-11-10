@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Categorias')}"></head>
+<body>
+    <header th:replace="~{fragments/layout :: menu}"></header>
+
+    <main class="container">
+        <div th:replace="~{fragments/layout :: mensagens}"></div>
+
+        <h1>Categorias</h1>
+
+        <p>
+            <a th:href="@{/admin/categorias/novo}" role="button">Nova categoria</a>
+            <a th:href="@{/admin}" role="button" class="secondary outline">Voltar</a>
+        </p>
+
+        <p th:if="${#lists.isEmpty(categorias)}">Nenhuma categoria cadastrada.</p>
+
+        <table th:unless="${#lists.isEmpty(categorias)}">
+            <thead>
+                <tr>
+                    <th>Nome no portal</th>
+                    <th>Grupo</th>
+                    <th>Situação</th>
+                    <th>Revisão</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="categoria : ${categorias}">
+                    <td th:text="${categoria.nomeNoPortal}"></td>
+                    <td th:text="${categoria.grupo.rotulo}"></td>
+                    <td th:text="${categoria.ativo} ? 'Ativa' : 'Inativa'"></td>
+                    <td th:text="${#temporals.format(categoria.dataRevisao, 'dd/MM/yyyy')}"></td>
+                    <td>
+                        <a th:href="@{/admin/categorias/{id}/editar(id=${categoria.id})}">Editar</a>
+                        <form th:if="${categoria.ativo}" th:action="@{/admin/categorias/{id}/desativar(id=${categoria.id})}" method="post">
+                            <button type="submit" class="secondary outline">Desativar</button>
+                        </form>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </main>
+
+    <footer th:replace="~{fragments/layout :: rodape}"></footer>
+</body>
+</html>
