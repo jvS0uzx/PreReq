@@ -63,6 +63,7 @@ public class HistoricoParser {
         for (RegistroEtapa reg : etapasParaProcessar) {
             ctx.processar(reg.data(), reg.etapa());
         }
+        ctx.encerrar();
 
         ResultadoFinal resultado;
         if (ctx.getEstadoAtual() instanceof Deferido) {

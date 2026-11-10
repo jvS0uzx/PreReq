@@ -12,10 +12,6 @@ public class Aberto implements EstadoPedido {
 
         String texto = linha.trim().toUpperCase();
 
-        if (texto.equals("ABERTURA DO ATENDIMENTO")) {
-            return this;
-        }
-
         if (texto.equals("DEFERIDO")) {
             return new Deferido();
         }
@@ -26,9 +22,10 @@ public class Aberto implements EstadoPedido {
 
         String setor = EmAnaliseSetor.identificarSetor(texto);
         if (setor != null) {
-            return new EmAnaliseSetor(setor);
+            return new EmAnaliseSetor(setor, data);
         }
 
+        ctx.setDataEntradaEstado(data);
         return this;
     }
 

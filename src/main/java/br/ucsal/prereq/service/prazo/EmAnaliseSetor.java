@@ -6,9 +6,11 @@ import java.time.temporal.ChronoUnit;
 public class EmAnaliseSetor implements EstadoPedido {
 
     private final String setor;
+    private final LocalDate conclusao;
 
-    public EmAnaliseSetor(String setor) {
+    public EmAnaliseSetor(String setor, LocalDate conclusao) {
         this.setor = setor;
+        this.conclusao = conclusao;
     }
 
     public String getSetor() {
@@ -21,31 +23,12 @@ public class EmAnaliseSetor implements EstadoPedido {
             return this;
         }
 
-        String texto = linha.trim().toUpperCase();
-
-        if (texto.equals("DEFERIDO")) {
-            fecharEtapa(ctx, data);
-            return new Deferido();
+        if (setor.equals(identificarSetor(linha))) {
+            return new EmAnaliseSetor(setor, data);
         }
 
-        if (texto.equals("INDEFERIDO")) {
-            fecharEtapa(ctx, data);
-            return new Indeferido();
-        }
-
-        String novoSetor = identificarSetor(texto);
-        if (novoSetor != null && !novoSetor.equals(this.setor)) {
-            fecharEtapa(ctx, data);
-            ctx.setDataEntradaEstado(data);
-            return new EmAnaliseSetor(novoSetor);
-        }
-
-        if (texto.equals("ENCERRAMENTO DO ATENDIMENTO")) {
-            fecharEtapa(ctx, data);
-            return this;
-        }
-
-        return this;
+        encerrar(ctx);
+        return new Aberto().proximo(ctx, data, linha);
     }
 
     @Override
@@ -53,9 +36,12 @@ public class EmAnaliseSetor implements EstadoPedido {
         return false;
     }
 
-    private void fecharEtapa(LeituraHistorico ctx, LocalDate dataSaida) {
-        long dias = ChronoUnit.DAYS.between(ctx.getDataEntradaEstado(), dataSaida);
-        ctx.registrarEtapa(new EtapaLida(this.setor, ctx.getDataEntradaEstado(), dataSaida, dias));
+    @Override
+    public void encerrar(LeituraHistorico ctx) {
+        LocalDate entrada = ctx.getDataEntradaEstado();
+        long dias = ChronoUnit.DAYS.between(entrada, conclusao);
+        ctx.registrarEtapa(new EtapaLida(setor, entrada, conclusao, dias));
+        ctx.setDataEntradaEstado(conclusao);
     }
 
     static String identificarSetor(String linha) {

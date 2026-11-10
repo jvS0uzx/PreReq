@@ -22,6 +22,10 @@ public class LeituraHistorico {
         }
     }
 
+    public void encerrar() {
+        estadoAtual.encerrar(this);
+    }
+
     public void registrarEtapa(EtapaLida etapa) {
         etapas.add(etapa);
     }
