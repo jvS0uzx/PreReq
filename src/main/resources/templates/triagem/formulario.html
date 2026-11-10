@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Triagem')}"></head>
+<body>
+    <header th:replace="~{fragments/layout :: menu}"></header>
+
+    <main class="container">
+        <div th:replace="~{fragments/layout :: mensagens}"></div>
+
+        <h1>Triagem</h1>
+        <p>Descreva com suas palavras o que você precisa resolver e descubra qual categoria escolher no portal.</p>
+
+        <form th:action="@{/triagem}" th:object="${triagemForm}" method="post">
+            <label for="descricao">O que você precisa?</label>
+            <textarea id="descricao" th:field="*{descricao}" rows="4" maxlength="500"
+                      placeholder="Ex.: preciso encerrar meu estágio para começar outro"
+                      th:aria-invalid="${#fields.hasErrors('descricao')} ? 'true'"></textarea>
+            <small th:if="${#fields.hasErrors('descricao')}" th:errors="*{descricao}"></small>
+
+            <button type="submit">Descobrir a categoria</button>
+        </form>
+
+        <section>
+            <h2>Exemplos</h2>
+            <ul>
+                <li><a th:href="@{/triagem(descricao='Preciso encerrar meu estágio para começar outro')}">Preciso encerrar meu estágio para começar outro</a></li>
+                <li><a th:href="@{/triagem(descricao='Quero trancar uma disciplina por conflito com o trabalho')}">Quero trancar uma disciplina por conflito com o trabalho</a></li>
+                <li><a th:href="@{/triagem(descricao='Preciso de uma declaração de matrícula para o estágio')}">Preciso de uma declaração de matrícula para o estágio</a></li>
+            </ul>
+        </section>
+    </main>
+
+    <footer th:replace="~{fragments/layout :: rodape}"></footer>
+</body>
+</html>
