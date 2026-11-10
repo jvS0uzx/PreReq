@@ -2,10 +2,12 @@ package br.ucsal.prereq.dto;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import br.ucsal.prereq.model.GrupoRequerimento;
 import br.ucsal.prereq.model.TipoRequerimento;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -121,6 +123,15 @@ public class CategoriaForm {
 
     public void setSetores(List<SetorOrdem> setores) {
         this.setores = setores;
+    }
+
+    @AssertTrue(message = "Dois setores não podem ter a mesma ordem.")
+    public boolean isOrdensDistintas() {
+        List<Integer> ordens = setores.stream()
+                .map(SetorOrdem::getOrdem)
+                .filter(Objects::nonNull)
+                .toList();
+        return ordens.stream().distinct().count() == ordens.size();
     }
 
     public static class SetorOrdem {
