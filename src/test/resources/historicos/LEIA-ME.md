@@ -4,9 +4,9 @@ Amostras do bloco "Histórico de etapas" copiado de protocolos concluídos no po
 
 ## Amostras
 
-| Arquivo          | Tipo             | Resultado                             | Dias até o encerramento |
-| ---------------- | ---------------- | ------------------------------------- | ----------------------- |
-| `amostra-01.txt` | Não identificado | Encerrado sem deferido nem indeferido | 17                      |
+| Arquivo | Tipo | Resultado | Dias até o encerramento |
+|---|---|---|---|
+| `amostra-01.txt` | Não identificado | Encerrado sem deferido nem indeferido | 17 |
 
 Ainda faltam amostras de pedido deferido, indeferido e que passou pelo Financeiro.
 
