@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Regra de triagem')}"></head>
+<body>
+    <header th:replace="~{fragments/layout :: menu}"></header>
+
+    <main class="container">
+        <div th:replace="~{fragments/layout :: mensagens}"></div>
+
+        <h1 th:text="${form.id == null} ? 'Nova regra de triagem' : 'Editar regra de triagem'">Regra de triagem</h1>
+
+        <p th:if="${form.indeferimentoId != null}" class="aviso aviso-info" th:text="'Regra criada a partir do indeferimento #' + ${form.indeferimentoId}"></p>
+
+        <form th:action="@{/admin/regras}" th:object="${form}" method="post">
+            <p th:each="erroGlobal : ${#fields.globalErrors()}" th:text="${erroGlobal}" class="aviso aviso-erro" role="alert"></p>
+
+            <input type="hidden" th:field="*{id}">
+            <input type="hidden" th:field="*{origem}">
+            <input type="hidden" th:field="*{indeferimentoId}">
+
+            <label for="palavrasChave">Palavras-chave</label>
+            <textarea id="palavrasChave" th:field="*{palavrasChave}" th:aria-invalid="${#fields.hasErrors('palavrasChave')} ? 'true'" required></textarea>
+            <small>Separe os termos por vírgula.</small>
+            <small th:if="${#fields.hasErrors('palavrasChave')}" th:errors="*{palavrasChave}"></small>
+
+            <label for="categoriaId">Categoria</label>
+            <select id="categoriaId" th:field="*{categoriaId}">
+                <option value="">Nenhuma (usar canal alternativo)</option>
+                <option th:each="c : ${categorias}" th:value="${c.id}" th:text="${c.nomeNoPortal}"></option>
+            </select>
+
+            <label for="canalAlternativo">Canal alternativo</label>
+            <textarea id="canalAlternativo" th:field="*{canalAlternativo}" th:aria-invalid="${#fields.hasErrors('canalAlternativo')} ? 'true'"></textarea>
+            <small th:if="${#fields.hasErrors('canalAlternativo')}" th:errors="*{canalAlternativo}"></small>
+
+            <label for="explicacao">Explicação</label>
+            <textarea id="explicacao" th:field="*{explicacao}" th:aria-invalid="${#fields.hasErrors('explicacao')} ? 'true'"></textarea>
+            <small th:if="${#fields.hasErrors('explicacao')}" th:errors="*{explicacao}"></small>
+
+            <label for="prioridade">Prioridade</label>
+            <input type="number" id="prioridade" th:field="*{prioridade}" th:aria-invalid="${#fields.hasErrors('prioridade')} ? 'true'">
+            <small th:if="${#fields.hasErrors('prioridade')}" th:errors="*{prioridade}"></small>
+
+            <button type="submit">Salvar</button>
+            <a th:href="@{/admin/regras}" role="button" class="secondary outline">Cancelar</a>
+        </form>
+
+        <p><a th:href="@{/admin}">Voltar para a administração</a></p>
+    </main>
+
+    <footer th:replace="~{fragments/layout :: rodape}"></footer>
+</body>
+</html>

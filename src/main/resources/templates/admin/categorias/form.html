@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Categoria')}"></head>
+<body>
+    <header th:replace="~{fragments/layout :: menu}"></header>
+
+    <main class="container">
+        <div th:replace="~{fragments/layout :: mensagens}"></div>
+
+        <h1 th:text="${form.id == null} ? 'Nova categoria' : 'Editar categoria'">Categoria</h1>
+
+        <form th:action="@{/admin/categorias}" th:object="${form}" method="post">
+            <input type="hidden" th:field="*{id}">
+
+            <label for="grupo">Grupo</label>
+            <select id="grupo" th:if="*{id == null}" th:field="*{grupo}" th:aria-invalid="${#fields.hasErrors('grupo')} ? 'true'" required>
+                <option value="">Selecione</option>
+                <option th:each="g : ${grupos}" th:value="${g}" th:text="${g.rotulo}"></option>
+            </select>
+            <th:block th:unless="*{id == null}">
+                <input type="hidden" th:field="*{grupo}">
+                <select disabled>
+                    <option th:text="*{grupo.rotulo}"></option>
+                </select>
+            </th:block>
+            <small th:if="${#fields.hasErrors('grupo')}" th:errors="*{grupo}"></small>
+
+            <label for="nomeNoPortal">Nome no portal</label>
+            <input type="text" id="nomeNoPortal" th:field="*{nomeNoPortal}" th:aria-invalid="${#fields.hasErrors('nomeNoPortal')} ? 'true'" required>
+            <small th:if="${#fields.hasErrors('nomeNoPortal')}" th:errors="*{nomeNoPortal}"></small>
+
+            <label for="descricao">Descrição</label>
+            <textarea id="descricao" th:field="*{descricao}" th:aria-invalid="${#fields.hasErrors('descricao')} ? 'true'"></textarea>
+            <small th:if="${#fields.hasErrors('descricao')}" th:errors="*{descricao}"></small>
+
+            <label for="quandoUsar">Quando usar</label>
+            <textarea id="quandoUsar" th:field="*{quandoUsar}" th:aria-invalid="${#fields.hasErrors('quandoUsar')} ? 'true'"></textarea>
+            <small th:if="${#fields.hasErrors('quandoUsar')}" th:errors="*{quandoUsar}"></small>
+
+            <label for="quandoNaoUsar">Quando não usar</label>
+            <textarea id="quandoNaoUsar" th:field="*{quandoNaoUsar}" th:aria-invalid="${#fields.hasErrors('quandoNaoUsar')} ? 'true'"></textarea>
+            <small th:if="${#fields.hasErrors('quandoNaoUsar')}" th:errors="*{quandoNaoUsar}"></small>
+
+            <label for="efeitos">Efeitos</label>
+            <textarea id="efeitos" th:field="*{efeitos}" th:aria-invalid="${#fields.hasErrors('efeitos')} ? 'true'"></textarea>
+            <small th:if="${#fields.hasErrors('efeitos')}" th:errors="*{efeitos}"></small>
+
+            <fieldset>
+                <legend>Documentos exigidos</legend>
+                <p th:if="${#lists.isEmpty(todosDocumentos)}">Nenhum documento cadastrado.</p>
+                <label th:each="documento : ${todosDocumentos}">
+                    <input type="checkbox" name="documentosIds" th:value="${documento.id}"
+                           th:checked="${#lists.contains(form.documentosIds, documento.id)}">
+                    <span th:text="${documento.nome}"></span>
+                </label>
+            </fieldset>
+
+            <fieldset>
+                <legend>Ordem de tramitação</legend>
+                <p><small>Informe a ordem dos setores que participam. Deixe em branco os que não participam.</small></p>
+                <p th:if="${#lists.isEmpty(todosSetores)}">Nenhum setor cadastrado.</p>
+                <div th:each="setor, st : ${todosSetores}">
+                    <input type="hidden" th:field="*{setores[__${st.index}__].setorId}">
+                    <label th:for="${'ordem' + st.index}" th:text="${setor.nome}"></label>
+                    <input type="number" min="1" th:id="${'ordem' + st.index}" th:field="*{setores[__${st.index}__].ordem}"
+                           th:aria-invalid="${#fields.hasErrors('setores[__${st.index}__].ordem')} ? 'true'">
+                    <small th:if="${#fields.hasErrors('setores[__${st.index}__].ordem')}" th:errors="*{setores[__${st.index}__].ordem}"></small>
+                </div>
+                <small th:if="${#fields.hasErrors('ordensDistintas')}" th:errors="*{ordensDistintas}"></small>
+            </fieldset>
+
+            <button type="submit">Salvar</button>
+            <a th:href="@{/admin/categorias}" role="button" class="secondary outline">Cancelar</a>
+        </form>
+
+        <p><a th:href="@{/admin}">Voltar para a administração</a></p>
+    </main>
+
+    <footer th:replace="~{fragments/layout :: rodape}"></footer>
+</body>
+</html>
