@@ -37,6 +37,52 @@ class HistoricoParserTest {
     }
 
     @Test
+    void deveEncerrarSemEtapasQuandoLerAmostra02() throws Exception {
+        ResultadoLeitura resultado = HistoricoParser.ler(carregarAmostra("amostra-02.txt"));
+
+        assertEquals(ResultadoFinal.ENCERRADO, resultado.resultado());
+        assertEquals(7, resultado.totalDias());
+        assertTrue(resultado.etapas().isEmpty());
+    }
+
+    @Test
+    void deveEncerrarSemEtapasQuandoLerAmostra03() throws Exception {
+        ResultadoLeitura resultado = HistoricoParser.ler(carregarAmostra("amostra-03.txt"));
+
+        assertEquals(ResultadoFinal.ENCERRADO, resultado.resultado());
+        assertEquals(1, resultado.totalDias());
+        assertTrue(resultado.etapas().isEmpty());
+    }
+
+    @Test
+    void deveEncerrarSemEtapasQuandoLerAmostra04() throws Exception {
+        ResultadoLeitura resultado = HistoricoParser.ler(carregarAmostra("amostra-04.txt"));
+
+        assertEquals(ResultadoFinal.ENCERRADO, resultado.resultado());
+        assertEquals(0, resultado.totalDias());
+        assertTrue(resultado.etapas().isEmpty());
+    }
+
+    @Test
+    void deveReconhecerRegistroAcademicoQuandoTextoVierComQuebraDeLinhaDoWindows() {
+        String texto = "Histórico de etapas\r\n"
+                + "Data de conclusão:28/08/2026 10:00:00\r\n"
+                + "ABERTURA DO ATENDIMENTO\r\n"
+                + "Data de conclusão:31/08/2026 10:00:00\r\n"
+                + "ANÁLISE DO REGISTRO ACADÊMICO\r\n"
+                + "Data de conclusão:24/09/2026 10:00:00\r\n"
+                + "ANÁLISE DO FINANCEIRO\r\n"
+                + "Data de conclusão:24/09/2026 10:00:1";
+
+        ResultadoLeitura resultado = HistoricoParser.ler(texto);
+
+        assertEquals(List.of(
+                new EtapaLida("REGISTRO ACADÊMICO", LocalDate.of(2026, 8, 28), LocalDate.of(2026, 8, 31), 3),
+                new EtapaLida("FINANCEIRO", LocalDate.of(2026, 8, 31), LocalDate.of(2026, 9, 24), 24)),
+                resultado.etapas());
+    }
+
+    @Test
     void deveContarCadaSetorAteASuaConclusaoQuandoPedidoForDeferido() {
         String texto = """
                 Histórico de etapas
@@ -174,6 +220,20 @@ class HistoricoParserTest {
         RegraNegocioException ex = assertThrows(
                 RegraNegocioException.class,
                 () -> HistoricoParser.ler(textoInvalido));
+        assertEquals("Não reconhecemos o histórico. Copie o bloco inteiro.", ex.getMessage());
+    }
+
+    @Test
+    void deveLancarExcecaoQuandoDataForInvalida() {
+        String texto = """
+                Histórico de etapas
+                Data de conclusão:32/13/2026 10:00:00
+                ABERTURA DO ATENDIMENTO
+                """;
+
+        RegraNegocioException ex = assertThrows(
+                RegraNegocioException.class,
+                () -> HistoricoParser.ler(texto));
         assertEquals("Não reconhecemos o histórico. Copie o bloco inteiro.", ex.getMessage());
     }
 }

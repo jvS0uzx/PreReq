@@ -2,6 +2,7 @@ package br.ucsal.prereq.service.prazo;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +39,7 @@ public class HistoricoParser {
             String linha = linhas.get(i);
             Matcher matcher = PADRAO_DATA_CONCLUSAO.matcher(linha);
             if (matcher.matches()) {
-                LocalDate data = LocalDate.parse(matcher.group(1), FORMATTER_DATA);
+                LocalDate data = lerData(matcher.group(1));
                 datasEncontradas.add(data);
 
                 if (i + 1 < linhas.size()) {
@@ -75,6 +76,14 @@ public class HistoricoParser {
         }
 
         return new ResultadoLeitura(ctx.getEtapas(), resultado, totalDias);
+    }
+
+    private static LocalDate lerData(String data) {
+        try {
+            return LocalDate.parse(data, FORMATTER_DATA);
+        } catch (DateTimeParseException e) {
+            throw new RegraNegocioException(MENSAGEM_ERRO_RECONHECIMENTO);
+        }
     }
 
     private record RegistroEtapa(LocalDate data, String etapa) {}

@@ -50,6 +50,9 @@ public class EmAnaliseSetor implements EstadoPedido {
         }
 
         String texto = linha.trim().toUpperCase();
+        if (texto.contains("REGISTRO ACADÊMICO") || texto.contains("REGISTRO ACADEMICO")) {
+            return "REGISTRO ACADÊMICO";
+        }
         if (texto.contains("SECRETARIA")) {
             return "SECRETARIA";
         }
