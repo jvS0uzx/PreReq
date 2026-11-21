@@ -20,6 +20,7 @@ import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,7 +39,11 @@ import br.ucsal.prereq.model.GrupoRequerimento;
 import br.ucsal.prereq.model.ResultadoPrazo;
 import br.ucsal.prereq.model.TipoRequerimento;
 import br.ucsal.prereq.service.CategoriaService;
+import br.ucsal.prereq.service.prazo.CalculoPrazo;
 import br.ucsal.prereq.service.prazo.EtapaLida;
+import br.ucsal.prereq.service.prazo.LinhaPrazo;
+import br.ucsal.prereq.service.prazo.PrazoReferencia;
+import br.ucsal.prereq.service.prazo.PrazoReferenciaService;
 import br.ucsal.prereq.service.prazo.PreviaPrazo;
 import br.ucsal.prereq.service.prazo.RegistroPrazoService;
 
@@ -57,6 +62,9 @@ class PrazoControllerTest {
     @MockitoBean
     private CategoriaService categoriaService;
 
+    @MockitoBean
+    private PrazoReferenciaService referenciaService;
+
     private TipoRequerimento categoria;
 
     @BeforeEach
@@ -66,6 +74,35 @@ class PrazoControllerTest {
         ReflectionTestUtils.setField(categoria, "id", 3L);
         when(categoriaService.listarAtivasPorGrupo())
                 .thenReturn(Map.of(GrupoRequerimento.ACADEMICO, List.of(categoria)));
+    }
+
+    @Test
+    void deveListarMedianaEP75PorCategoriaQuandoAcessarPrazos() throws Exception {
+        TipoRequerimento poucosDados = TipoRequerimento.novo(GrupoRequerimento.DOCUMENTAL);
+        poucosDados.setNomeNoPortal("HISTÓRICO ESCOLAR - GRADUAÇÃO");
+        when(referenciaService.listar(any(CalculoPrazo.class), any(CalculoPrazo.class))).thenReturn(List.of(
+                new LinhaPrazo(categoria, 4,
+                        Optional.of(new PrazoReferencia("Mediana", 25.0, List.of(), 4)),
+                        Optional.of(new PrazoReferencia("P75", 32.5, List.of(), 4))),
+                new LinhaPrazo(poucosDados, 1, Optional.empty(), Optional.empty())));
+
+        mockMvc.perform(get("/prazos"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("prazos/lista"))
+                .andExpect(content().string(containsString("RENOVAÇÃO TRANCAMENTO - GRADUAÇÃO")))
+                .andExpect(content().string(containsString("25,0")))
+                .andExpect(content().string(containsString("32,5")))
+                .andExpect(content().string(containsString("Dados insuficientes")))
+                .andExpect(content().string(containsString("/prazos/contribuir")));
+    }
+
+    @Test
+    void deveConvidarAContribuirQuandoNaoHouverNenhumRegistro() throws Exception {
+        when(referenciaService.listar(any(CalculoPrazo.class), any(CalculoPrazo.class))).thenReturn(List.of());
+
+        mockMvc.perform(get("/prazos"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("Ainda não há nenhum prazo informado")));
     }
 
     @Test

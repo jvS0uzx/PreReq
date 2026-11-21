@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Prazos de referência')}"></head>
+<body>
+    <header th:replace="~{fragments/layout :: menu}"></header>
+
+    <main class="container">
+        <div th:replace="~{fragments/layout :: mensagens}"></div>
+
+        <h1>Prazos de referência</h1>
+        <p>Quanto tempo os pedidos de cada categoria levaram até fechar, segundo os históricos informados por alunos. Não é um prazo oficial da universidade.</p>
+
+        <table th:unless="${#lists.isEmpty(linhas)}">
+            <thead>
+                <tr>
+                    <th scope="col">Categoria</th>
+                    <th scope="col" th:text="${central} + ' (dias)'"></th>
+                    <th scope="col" th:text="${folga} + ' (dias)'"></th>
+                    <th scope="col">Pedidos informados</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="linha : ${linhas}">
+                    <td><a th:href="@{/categorias/{id}(id=${linha.categoria.id})}" th:text="${linha.categoria.nomeNoPortal}"></a></td>
+                    <th:block th:if="${linha.central.present}">
+                        <td th:text="${#numbers.formatDecimal(linha.central.get().totalDias, 1, 1, 'COMMA')}"></td>
+                        <td th:text="${#numbers.formatDecimal(linha.folga.get().totalDias, 1, 1, 'COMMA')}"></td>
+                    </th:block>
+                    <td th:unless="${linha.central.present}" colspan="2">Dados insuficientes (mínimo de 3 pedidos)</td>
+                    <td th:text="${linha.registros}"></td>
+                </tr>
+            </tbody>
+        </table>
+        <p th:if="${#lists.isEmpty(linhas)}">Ainda não há nenhum prazo informado.</p>
+
+        <a th:href="@{/prazos/contribuir}" role="button">Contribuir com o prazo do meu pedido</a>
+    </main>
+
+    <footer th:replace="~{fragments/layout :: rodape}"></footer>
+</body>
+</html>

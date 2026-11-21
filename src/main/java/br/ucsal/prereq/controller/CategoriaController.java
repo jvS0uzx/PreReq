@@ -3,6 +3,10 @@ package br.ucsal.prereq.controller;
 import br.ucsal.prereq.dto.DadosSolicitacao;
 import br.ucsal.prereq.model.TipoRequerimento;
 import br.ucsal.prereq.service.CategoriaService;
+import br.ucsal.prereq.service.prazo.CalculoMediana;
+import br.ucsal.prereq.service.prazo.CalculoPercentil;
+import br.ucsal.prereq.service.prazo.CalculoPrazo;
+import br.ucsal.prereq.service.prazo.PrazoReferenciaService;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,10 +22,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("/categorias")
 public class CategoriaController {
 
-    private final CategoriaService service;
+    private static final CalculoPrazo CENTRAL = new CalculoMediana();
+    private static final CalculoPrazo FOLGA = new CalculoPercentil(75);
 
-    public CategoriaController(CategoriaService service) {
+    private final CategoriaService service;
+    private final PrazoReferenciaService prazoService;
+
+    public CategoriaController(CategoriaService service, PrazoReferenciaService prazoService) {
         this.service = service;
+        this.prazoService = prazoService;
     }
 
     @GetMapping
@@ -43,6 +52,7 @@ public class CategoriaController {
     public String detalhe(@PathVariable Long id, Model model) {
         model.addAttribute("categoria", service.buscar(id));
         model.addAttribute("dadosSolicitacao", new DadosSolicitacao());
+        adicionarPrazo(id, model);
         return "categorias/detalhe";
     }
 
@@ -54,6 +64,7 @@ public class CategoriaController {
             Model model) {
 
         TipoRequerimento categoria = service.buscar(id);
+        adicionarPrazo(id, model);
 
         if (result.hasErrors()) {
             model.addAttribute("categoria", categoria);
@@ -65,5 +76,10 @@ public class CategoriaController {
         model.addAttribute("textoGerado", textoGerado);
 
         return "categorias/detalhe";
+    }
+
+    private void adicionarPrazo(Long id, Model model) {
+        model.addAttribute("prazoCentral", prazoService.porCategoria(id, CENTRAL).orElse(null));
+        model.addAttribute("prazoFolga", prazoService.porCategoria(id, FOLGA).orElse(null));
     }
 }

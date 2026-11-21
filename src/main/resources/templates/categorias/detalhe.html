@@ -48,9 +48,39 @@
             </ul>
         </div>
 
-        <div class="aviso aviso-info">
-            <strong>Prazo de referência:</strong> em breve
+        <h3>Prazo de referência</h3>
+        <div th:if="${prazoCentral != null}">
+            <p>
+                Pedidos desta categoria costumam levar
+                <strong th:text="${#numbers.formatDecimal(prazoCentral.totalDias, 1, 1, 'COMMA')}"></strong> dias
+                (<span th:text="${prazoCentral.calculo}"></span>). Três em cada quatro fecham em até
+                <strong th:text="${#numbers.formatDecimal(prazoFolga.totalDias, 1, 1, 'COMMA')}"></strong> dias
+                (<span th:text="${prazoFolga.calculo}"></span>).
+                Calculado com <span th:text="${prazoCentral.amostra}"></span> pedidos informados por alunos.
+            </p>
+            <table th:unless="${#lists.isEmpty(prazoCentral.setores)}">
+                <thead>
+                    <tr>
+                        <th scope="col">Setor</th>
+                        <th scope="col" th:text="${prazoCentral.calculo} + ' (dias)'"></th>
+                        <th scope="col" th:text="${prazoFolga.calculo} + ' (dias)'"></th>
+                        <th scope="col">Pedidos</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="setor, i : ${prazoCentral.setores}">
+                        <td th:text="${setor.setor}"></td>
+                        <td th:text="${#numbers.formatDecimal(setor.dias, 1, 1, 'COMMA')}"></td>
+                        <td th:text="${#numbers.formatDecimal(prazoFolga.setores[i.index].dias, 1, 1, 'COMMA')}"></td>
+                        <td th:text="${setor.amostra}"></td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
+        <p th:if="${prazoCentral == null}" class="aviso aviso-info">
+            Ainda não temos dados suficientes para esta categoria. São precisos pelo menos 3 pedidos concluídos.
+        </p>
+        <p><a th:href="@{/prazos/contribuir}">Seu pedido já fechou? Contribua com o prazo dele</a></p>
 
         <hr>
 

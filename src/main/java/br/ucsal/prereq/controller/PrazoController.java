@@ -17,7 +17,11 @@ import br.ucsal.prereq.dto.ContribuicaoForm;
 import br.ucsal.prereq.dto.EtapaPrazoForm;
 import br.ucsal.prereq.exception.RegraNegocioException;
 import br.ucsal.prereq.service.CategoriaService;
+import br.ucsal.prereq.service.prazo.CalculoMediana;
+import br.ucsal.prereq.service.prazo.CalculoPercentil;
+import br.ucsal.prereq.service.prazo.CalculoPrazo;
 import br.ucsal.prereq.service.prazo.EtapaLida;
+import br.ucsal.prereq.service.prazo.PrazoReferenciaService;
 import br.ucsal.prereq.service.prazo.PreviaPrazo;
 import br.ucsal.prereq.service.prazo.RegistroPrazoService;
 import jakarta.validation.Valid;
@@ -26,16 +30,31 @@ import jakarta.validation.Valid;
 @RequestMapping("/prazos")
 public class PrazoController {
 
+    private static final CalculoPrazo CENTRAL = new CalculoMediana();
+    private static final CalculoPrazo FOLGA = new CalculoPercentil(75);
+
+    private static final String VIEW_LISTA = "prazos/lista";
     private static final String VIEW_FORM = "prazos/contribuir";
     private static final String VIEW_PREVIA = "prazos/previa";
     private static final String REDIRECT_FORM = "redirect:/prazos/contribuir";
 
     private final RegistroPrazoService service;
     private final CategoriaService categoriaService;
+    private final PrazoReferenciaService referenciaService;
 
-    public PrazoController(RegistroPrazoService service, CategoriaService categoriaService) {
+    public PrazoController(RegistroPrazoService service, CategoriaService categoriaService,
+            PrazoReferenciaService referenciaService) {
         this.service = service;
         this.categoriaService = categoriaService;
+        this.referenciaService = referenciaService;
+    }
+
+    @GetMapping
+    public String listar(Model model) {
+        model.addAttribute("linhas", referenciaService.listar(CENTRAL, FOLGA));
+        model.addAttribute("central", CENTRAL.nome());
+        model.addAttribute("folga", FOLGA.nome());
+        return VIEW_LISTA;
     }
 
     @GetMapping("/contribuir")
