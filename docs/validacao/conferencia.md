@@ -6,7 +6,7 @@ Nenhum dado pessoal (nome, RA, número de protocolo) é registrado neste documen
 
 ## Resumo
 
-A conferência com a CRA (Central de Relacionamento ao Aluno) foi tentada pessoalmente nas datas de 13, 16-17/11 e via e-mail no dia 20/11. Não houve resposta até 23/11. Por isso, a conferência foi feita por **análise direta do Portal do Aluno** e dos protocolos concluídos da equipe, sem validação institucional.
+A conferência com a CRA (Central de Relacionamento ao Aluno) foi tentada pessoalmente nas datas de 13, 16-17/11 e via e-mail no dia 20/11. Não houve resposta até a abertura do PR, também em 20/11. Por isso, a conferência foi feita por **análise direta do Portal do Aluno** e dos protocolos concluídos da equipe, sem validação institucional.
 
 Isso significa que as conclusões abaixo são deduções a partir do que o portal mostra, e **não** confirmações da universidade.
 
@@ -21,7 +21,7 @@ Isso significa que as conclusões abaixo são deduções a partir do que o porta
 
 - Portal do Aluno (Solicitações → Requerimentos), consulta somente leitura em 17/11: aba "Disponíveis" (8 tipos) e lista suspensa de "Abertura de Requerimento" (37 categorias).
 - Protocolos concluídos da equipe, sem dados pessoais: comprovante de matrícula, reembolso, assinatura de contrato de estágio, e os três casos descritos na proposta (dispensa de estágio, trancamento, transferência interna).
-- E-mail enviado à CRA, Osvaldo e Joslene em 20/11, sem resposta.
+- E-mail enviado à CRA em 20/11, sem resposta.
 
 ## Perguntas e conclusões
 
@@ -82,20 +82,24 @@ Isso significa que as conclusões abaixo são deduções a partir do que o porta
 
 | Arquivo | Mudança | Pergunta |
 |---|---|---|
+| `categorias.csv` | Remove `TRANCAMENTO DE MATRÍCULA EM DISCIPLINA` e `TRANSFERÊNCIA INTERNA`, que não estão na lista do portal | 2, 3 |
+| `categorias.csv` | `RENOVAÇÃO TRANCAMENTO - GRADUAÇÃO` passa a ter os setores Registro Acadêmico e Financeiro e o aviso do recálculo das parcelas | 3 |
 | `categorias.csv` | Linha única para `REEMBOLSO TODOS OS NIVEIS` | 5 |
 | `categorias.csv` | `quando_nao_usar` da assinatura de estágio: serve apenas para iniciar | 1 |
 | `regras.csv` | Regra para encerrar estágio apontando `canal_alternativo` | 1 |
-| `regras.csv` | Regra para transferência interna apontando `canal_alternativo` | 2 |
-| `regras.csv` | Regras separadas por "frequência" para comprovante e declaração de matrícula | 4 |
+| `regras.csv` | Regras de trancamento de disciplina apontando a coordenação do curso como `canal_alternativo` | 3 |
+| `regras.csv` | Regras de transferência interna apontando a coordenação do curso como `canal_alternativo` | 2 |
+| `regras.csv` | Regra própria para a declaração de matrícula e frequência, separada da regra do comprovante de matrícula | 4 |
+| `setores.csv` | Descrição do Registro Acadêmico sem citar a transferência interna | 2 |
 
 Se o banco já tiver sido carregado, as mudanças precisam ser feitas também pelo admin, porque a carga inicial só roda com o banco vazio.
 
 ## Categorias conferidas e `dataRevisao`
 
-| Categoria | Conferida por | Data |
+| Categoria | Conferida por | Data da consulta ao portal |
 |---|---|---|
-| `ASSINATURA DE CONTRATO DE ESTÁGIO - GRADUAÇÃO` | análise de protocolo e do portal | [DATA] |
-| `REEMBOLSO TODOS OS NIVEIS` | análise de protocolo e do portal | [DATA] |
-| `COMPROVANTE DE MATRÍCULA - GRADUAÇÃO` | análise de protocolo e do portal | [DATA] |
-| `SOLICITAÇÃO DE DISPENSA DE ESTÁGIO CURRICULAR - DIREITO` | análise da lista do portal | [DATA] |
-| `TRANSFERÊNCIA EXTERNA` | análise da lista do portal | [DATA] |
+| `ASSINATURA DE CONTRATO DE ESTÁGIO - GRADUAÇÃO` | análise de protocolo e do portal | 17/11/2026 |
+| `REEMBOLSO TODOS OS NIVEIS` | análise de protocolo e do portal | 17/11/2026 |
+| `COMPROVANTE DE MATRÍCULA - GRADUAÇÃO` | análise de protocolo e do portal | 17/11/2026 |
+| `SOLICITAÇÃO DE DISPENSA DE ESTÁGIO CURRICULAR - DIREITO` | análise da lista do portal | 17/11/2026 |
+| `TRANSFERÊNCIA EXTERNA` | análise da lista do portal | 17/11/2026 |
