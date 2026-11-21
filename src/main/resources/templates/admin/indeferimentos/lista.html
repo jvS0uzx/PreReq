@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Indeferimentos')}"></head>
+<body>
+    <header th:replace="~{fragments/layout :: menu}"></header>
+
+    <main class="container">
+        <div th:replace="~{fragments/layout :: mensagens}"></div>
+
+        <h1>Indeferimentos pendentes</h1>
+        <p>Relatos de alunos que tiveram o pedido negado por procedimento. Converta em regra o que ajuda a triagem e descarte o resto.</p>
+
+        <p><a th:href="@{/admin}" role="button" class="secondary outline">Voltar</a></p>
+
+        <p th:if="${#lists.isEmpty(indeferimentos)}">Nenhum indeferimento pendente.</p>
+
+        <table th:unless="${#lists.isEmpty(indeferimentos)}">
+            <thead>
+                <tr>
+                    <th>Data</th>
+                    <th>Categoria escolhida</th>
+                    <th>O que o aluno precisava</th>
+                    <th>Motivo informado</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="indeferimento : ${indeferimentos}">
+                    <td th:text="${#temporals.format(indeferimento.dataRegistro, 'dd/MM/yyyy')}"></td>
+                    <td th:text="${indeferimento.categoriaEscolhida.nomeNoPortal}"></td>
+                    <td th:text="${indeferimento.OQueOAlunoPrecisava}"></td>
+                    <td th:text="${indeferimento.motivoInformado}"></td>
+                    <td>
+                        <form th:action="@{/admin/indeferimentos/{id}/converter(id=${indeferimento.id})}" method="post">
+                            <button type="submit">Converter em regra</button>
+                        </form>
+                        <form th:action="@{/admin/indeferimentos/{id}/descartar(id=${indeferimento.id})}" method="post">
+                            <button type="submit" class="secondary outline">Descartar</button>
+                        </form>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </main>
+
+    <footer th:replace="~{fragments/layout :: rodape}"></footer>
+</body>
+</html>

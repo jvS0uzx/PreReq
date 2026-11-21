@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Relatar indeferimento')}"></head>
+<body>
+    <header th:replace="~{fragments/layout :: menu}"></header>
+
+    <main class="container">
+        <div th:replace="~{fragments/layout :: mensagens}"></div>
+
+        <h1>Relatar indeferimento</h1>
+        <p>Seu pedido voltou negado por causa do procedimento, como "campo equivocado" ou "faltou documento"? Conte o que aconteceu para o próximo aluno não errar igual.</p>
+
+        <p class="aviso aviso-atencao">Não escreva seu nome, RA ou número do protocolo.</p>
+
+        <form th:action="@{/indeferimentos/novo}" th:object="${indeferimentoForm}" method="post">
+            <label for="categoriaEscolhidaId">Categoria que você escolheu no portal</label>
+            <select id="categoriaEscolhidaId" th:field="*{categoriaEscolhidaId}"
+                    th:aria-invalid="${#fields.hasErrors('categoriaEscolhidaId')} ? 'true'">
+                <option value="">Selecione</option>
+                <optgroup th:each="grupo : ${categorias}" th:label="${grupo.key.rotulo}">
+                    <option th:each="c : ${grupo.value}" th:value="${c.id}" th:text="${c.nomeNoPortal}"></option>
+                </optgroup>
+            </select>
+            <small th:if="${#fields.hasErrors('categoriaEscolhidaId')}" th:errors="*{categoriaEscolhidaId}"></small>
+
+            <label for="necessidade">O que você precisava resolver</label>
+            <textarea id="necessidade" th:field="*{necessidade}" rows="3" maxlength="1000"
+                      placeholder="Ex.: precisava encerrar meu estágio para começar outro"
+                      th:aria-invalid="${#fields.hasErrors('necessidade')} ? 'true'"></textarea>
+            <small th:if="${#fields.hasErrors('necessidade')}" th:errors="*{necessidade}"></small>
+
+            <label for="motivoInformado">Motivo que veio no indeferimento</label>
+            <textarea id="motivoInformado" th:field="*{motivoInformado}" rows="3" maxlength="1000"
+                      placeholder="Ex.: campo equivocado"
+                      th:aria-invalid="${#fields.hasErrors('motivoInformado')} ? 'true'"></textarea>
+            <small th:if="${#fields.hasErrors('motivoInformado')}" th:errors="*{motivoInformado}"></small>
+
+            <button type="submit">Enviar relato</button>
+        </form>
+    </main>
+
+    <footer th:replace="~{fragments/layout :: rodape}"></footer>
+</body>
+</html>

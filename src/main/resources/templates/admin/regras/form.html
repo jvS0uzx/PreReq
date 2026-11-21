@@ -11,6 +11,12 @@
 
         <p th:if="${form.indeferimentoId != null}" class="aviso aviso-info" th:text="'Regra criada a partir do indeferimento #' + ${form.indeferimentoId}"></p>
 
+        <article th:if="${relato != null}">
+            <p>O aluno precisava de: <strong th:text="${relato.OQueOAlunoPrecisava}"></strong></p>
+            <p>Categoria que ele escolheu: <span th:text="${relato.categoriaEscolhida.nomeNoPortal}"></span></p>
+            <p>Motivo do indeferimento: <span th:text="${relato.motivoInformado}"></span></p>
+        </article>
+
         <form th:action="@{/admin/regras}" th:object="${form}" method="post">
             <p th:each="erroGlobal : ${#fields.globalErrors()}" th:text="${erroGlobal}" class="aviso aviso-erro" role="alert"></p>
 

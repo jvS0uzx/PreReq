@@ -25,6 +25,7 @@ import br.ucsal.prereq.model.RegraTriagem;
 import br.ucsal.prereq.model.TipoRequerimento;
 import br.ucsal.prereq.repository.RegraTriagemRepository;
 import br.ucsal.prereq.repository.TipoRequerimentoRepository;
+import br.ucsal.prereq.service.IndeferimentoService;
 
 @ExtendWith(MockitoExtension.class)
 class RegraTriagemAdminServiceTest {
@@ -34,6 +35,9 @@ class RegraTriagemAdminServiceTest {
 
     @Mock
     private TipoRequerimentoRepository categoriaRepository;
+
+    @Mock
+    private IndeferimentoService indeferimentoService;
 
     @InjectMocks
     private RegraTriagemAdminService service;
@@ -48,6 +52,30 @@ class RegraTriagemAdminServiceTest {
                 .isInstanceOf(RegraNegocioException.class)
                 .hasMessageContaining("não os dois");
         verify(repository, never()).save(any());
+    }
+
+    @Test
+    void deveMarcarIndeferimentoComoConvertidoQuandoSalvarRegraVindaDeIndeferimento() {
+        RegraForm form = form("encerrar estagio");
+        form.setCanalAlternativo("Coordenação do curso");
+        form.setOrigem(OrigemRegra.INDEFERIMENTO);
+        form.setIndeferimentoId(8L);
+        when(repository.save(any(RegraTriagem.class))).thenAnswer(i -> i.getArgument(0));
+
+        service.salvar(form);
+
+        verify(indeferimentoService).marcarConvertido(8L, null);
+    }
+
+    @Test
+    void deveDeixarIndeferimentosEmPazQuandoRegraForManual() {
+        RegraForm form = form("encerrar estagio");
+        form.setCanalAlternativo("Coordenação do curso");
+        when(repository.save(any(RegraTriagem.class))).thenAnswer(i -> i.getArgument(0));
+
+        service.salvar(form);
+
+        org.mockito.Mockito.verifyNoInteractions(indeferimentoService);
     }
 
     @Test

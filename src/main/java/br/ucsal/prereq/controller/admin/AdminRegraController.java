@@ -14,6 +14,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import br.ucsal.prereq.dto.RegraForm;
 import br.ucsal.prereq.exception.RegraNegocioException;
 import br.ucsal.prereq.model.OrigemRegra;
+import br.ucsal.prereq.service.IndeferimentoService;
 import br.ucsal.prereq.service.admin.RegraTriagemAdminService;
 import br.ucsal.prereq.service.triagem.TriagemService;
 import jakarta.validation.Valid;
@@ -28,10 +29,13 @@ public class AdminRegraController {
 
     private final RegraTriagemAdminService service;
     private final TriagemService triagemService;
+    private final IndeferimentoService indeferimentoService;
 
-    public AdminRegraController(RegraTriagemAdminService service, TriagemService triagemService) {
+    public AdminRegraController(RegraTriagemAdminService service, TriagemService triagemService,
+            IndeferimentoService indeferimentoService) {
         this.service = service;
         this.triagemService = triagemService;
+        this.indeferimentoService = indeferimentoService;
     }
 
     @GetMapping
@@ -54,26 +58,27 @@ public class AdminRegraController {
             form.setIndeferimentoId(indeferimento);
         }
         model.addAttribute("form", form);
-        return abrirForm(model);
+        return abrirForm(model, form);
     }
 
     @GetMapping("/{id}/editar")
     public String editar(@PathVariable Long id, Model model) {
-        model.addAttribute("form", service.buscarForm(id));
-        return abrirForm(model);
+        RegraForm form = service.buscarForm(id);
+        model.addAttribute("form", form);
+        return abrirForm(model, form);
     }
 
     @PostMapping
     public String salvar(@Valid @ModelAttribute("form") RegraForm form, BindingResult result,
             Model model, RedirectAttributes redirect) {
         if (result.hasErrors()) {
-            return abrirForm(model);
+            return abrirForm(model, form);
         }
         try {
             service.salvar(form);
         } catch (RegraNegocioException e) {
             result.reject("regra.invalida", e.getMessage());
-            return abrirForm(model);
+            return abrirForm(model, form);
         }
         redirect.addFlashAttribute("sucesso", "Regra salva.");
         return REDIRECT_LISTA;
@@ -92,8 +97,11 @@ public class AdminRegraController {
         return VIEW_LISTA;
     }
 
-    private String abrirForm(Model model) {
+    private String abrirForm(Model model, RegraForm form) {
         model.addAttribute("categorias", service.listarCategoriasAtivas());
+        if (form.getIndeferimentoId() != null) {
+            model.addAttribute("relato", indeferimentoService.buscar(form.getIndeferimentoId()));
+        }
         return VIEW_FORM;
     }
 }

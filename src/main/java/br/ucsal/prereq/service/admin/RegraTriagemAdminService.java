@@ -16,6 +16,7 @@ import br.ucsal.prereq.model.RegraTriagem;
 import br.ucsal.prereq.model.TipoRequerimento;
 import br.ucsal.prereq.repository.RegraTriagemRepository;
 import br.ucsal.prereq.repository.TipoRequerimentoRepository;
+import br.ucsal.prereq.service.IndeferimentoService;
 import br.ucsal.prereq.service.triagem.NormalizadorTexto;
 
 @Service
@@ -24,11 +25,13 @@ public class RegraTriagemAdminService {
 
     private final RegraTriagemRepository repository;
     private final TipoRequerimentoRepository categoriaRepository;
+    private final IndeferimentoService indeferimentoService;
 
     public RegraTriagemAdminService(RegraTriagemRepository repository,
-            TipoRequerimentoRepository categoriaRepository) {
+            TipoRequerimentoRepository categoriaRepository, IndeferimentoService indeferimentoService) {
         this.repository = repository;
         this.categoriaRepository = categoriaRepository;
+        this.indeferimentoService = indeferimentoService;
     }
 
     public List<RegraTriagem> listar(boolean somenteInativas) {
@@ -80,6 +83,9 @@ public class RegraTriagemAdminService {
         regra.setExplicacao(form.getExplicacao());
         regra.setPrioridade(form.getPrioridade());
         regra.setDataRevisao(LocalDate.now());
+        if (form.getId() == null && form.getIndeferimentoId() != null) {
+            indeferimentoService.marcarConvertido(form.getIndeferimentoId(), regra.getCategoria());
+        }
         return repository.save(regra);
     }
 

@@ -29,6 +29,7 @@ import br.ucsal.prereq.dto.RegraForm;
 import br.ucsal.prereq.exception.RegraNegocioException;
 import br.ucsal.prereq.model.OrigemRegra;
 import br.ucsal.prereq.model.RegraTriagem;
+import br.ucsal.prereq.service.IndeferimentoService;
 import br.ucsal.prereq.service.admin.RegraTriagemAdminService;
 import br.ucsal.prereq.service.triagem.ResultadoTriagem;
 import br.ucsal.prereq.service.triagem.TriagemService;
@@ -45,6 +46,9 @@ class AdminRegraControllerTest {
 
     @MockitoBean
     private TriagemService triagemService;
+
+    @MockitoBean
+    private IndeferimentoService indeferimentoService;
 
     @Test
     @WithMockUser
@@ -99,6 +103,23 @@ class AdminRegraControllerTest {
                 .andExpect(model().attribute("form", org.hamcrest.Matchers.hasProperty("origem",
                         org.hamcrest.Matchers.is(OrigemRegra.INDEFERIMENTO))))
                 .andExpect(content().string(org.hamcrest.Matchers.containsString("indeferimento #5")));
+    }
+
+    @Test
+    @WithMockUser
+    void deveMostrarORelatoDoAlunoQuandoRegraVierDeIndeferimento() throws Exception {
+        br.ucsal.prereq.model.TipoRequerimento escolhida = br.ucsal.prereq.model.TipoRequerimento
+                .novo(br.ucsal.prereq.model.GrupoRequerimento.ESTAGIO);
+        escolhida.setNomeNoPortal("SOLICITAÇÃO DE DISPENSA DE ESTÁGIO CURRICULAR - DIREITO");
+        when(service.novoForm()).thenReturn(new RegraForm());
+        when(indeferimentoService.buscar(5L)).thenReturn(new br.ucsal.prereq.model.Indeferimento(escolhida,
+                "precisava encerrar meu estágio", "campo equivocado", java.time.LocalDate.of(2026, 11, 20)));
+
+        mockMvc.perform(get("/admin/regras/novo").param("indeferimento", "5"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(org.hamcrest.Matchers.containsString("precisava encerrar meu estágio")))
+                .andExpect(content().string(org.hamcrest.Matchers.containsString("campo equivocado")))
+                .andExpect(content().string(org.hamcrest.Matchers.containsString("DISPENSA DE ESTÁGIO")));
     }
 
     @Test

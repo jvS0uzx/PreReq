@@ -8,11 +8,12 @@ import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
 import org.springframework.context.annotation.Import;
 
 import br.ucsal.prereq.dto.RegraForm;
+import br.ucsal.prereq.service.IndeferimentoService;
 import br.ucsal.prereq.service.triagem.ResultadoTriagem;
 import br.ucsal.prereq.service.triagem.TriagemService;
 
 @DataJpaTest
-@Import({ RegraTriagemAdminService.class, TriagemService.class })
+@Import({ RegraTriagemAdminService.class, TriagemService.class, IndeferimentoService.class })
 class RegraTriagemAdminIntegracaoTest {
 
     @Autowired
