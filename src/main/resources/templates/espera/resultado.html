@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Resultado da espera')}"></head>
+<body>
+    <header th:replace="~{fragments/layout :: menu}"></header>
+
+    <main class="container">
+        <div th:replace="~{fragments/layout :: mensagens}"></div>
+
+        <h1>Minha espera</h1>
+
+        <article th:with="situacao=${resultado.situacao}">
+            <h2 th:text="${situacao.categoria.nomeNoPortal}"></h2>
+            <p>
+                Aberto em <span th:text="${#temporals.format(situacao.dataAbertura, 'dd/MM/yyyy')}"></span>,
+                há <strong th:text="${situacao.diasCorridos}"></strong> dia(s).
+                <span th:if="${situacao.setorAtual.present}">Setor atual: <span th:text="${situacao.setorAtual.get().nome}"></span>.</span>
+            </p>
+            <p th:if="${situacao.prazo.present}">
+                Três em cada quatro pedidos desta categoria fecham em até
+                <strong th:text="${#numbers.formatDecimal(situacao.prazo.get().totalDias, 1, 1, 'COMMA')}"></strong> dias
+                (<span th:text="${situacao.prazo.get().amostra}"></span> pedidos informados).
+            </p>
+        </article>
+
+        <p th:each="alerta : ${resultado.alertas}" th:text="${alerta.mensagem}"
+           th:class="${alerta.nivel.name() == 'ATENCAO'} ? 'aviso aviso-atencao' : 'aviso aviso-info'"
+           th:attr="role=${alerta.nivel.name() == 'ATENCAO'} ? 'alert' : 'status'"></p>
+        <p th:if="${#lists.isEmpty(resultado.alertas)}" class="aviso aviso-sucesso" role="status">Sua espera está dentro do usual para esta categoria.</p>
+
+        <p>
+            <a th:href="@{/espera}" role="button" class="secondary outline">Verificar outro pedido</a>
+            <a th:href="@{/prazos/contribuir}">Seu pedido já fechou? Contribua com o prazo dele</a>
+        </p>
+    </main>
+
+    <footer th:replace="~{fragments/layout :: rodape}"></footer>
+</body>
+</html>

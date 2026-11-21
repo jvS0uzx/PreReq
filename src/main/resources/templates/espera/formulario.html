@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Minha espera')}"></head>
+<body>
+    <header th:replace="~{fragments/layout :: menu}"></header>
+
+    <main class="container">
+        <div th:replace="~{fragments/layout :: mensagens}"></div>
+
+        <h1>Minha espera</h1>
+        <p>Informe o tipo do pedido e quando você abriu. A gente compara com o tempo que pedidos parecidos levaram e diz se já passou do normal.</p>
+        <p><small>Nada do que você informar aqui é guardado.</small></p>
+
+        <form th:action="@{/espera}" th:object="${esperaForm}" method="post">
+            <label for="categoriaId">Categoria do pedido</label>
+            <select id="categoriaId" th:field="*{categoriaId}"
+                    th:aria-invalid="${#fields.hasErrors('categoriaId')} ? 'true'">
+                <option value="">Selecione</option>
+                <optgroup th:each="grupo : ${categorias}" th:label="${grupo.key.rotulo}">
+                    <option th:each="c : ${grupo.value}" th:value="${c.id}" th:text="${c.nomeNoPortal}"></option>
+                </optgroup>
+            </select>
+            <small th:if="${#fields.hasErrors('categoriaId')}" th:errors="*{categoriaId}"></small>
+
+            <label for="dataAbertura">Data em que você abriu o pedido</label>
+            <input type="date" id="dataAbertura" th:field="*{dataAbertura}"
+                   th:aria-invalid="${#fields.hasErrors('dataAbertura')} ? 'true'">
+            <small th:if="${#fields.hasErrors('dataAbertura')}" th:errors="*{dataAbertura}"></small>
+
+            <label for="setorId">Setor em que o pedido está agora (opcional)</label>
+            <select id="setorId" th:field="*{setorId}">
+                <option value="">Não sei</option>
+                <option th:each="s : ${setores}" th:value="${s.id}" th:text="${s.nome}"></option>
+            </select>
+
+            <button type="submit">Verificar</button>
+        </form>
+    </main>
+
+    <footer th:replace="~{fragments/layout :: rodape}"></footer>
+</body>
+</html>
