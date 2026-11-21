@@ -62,6 +62,9 @@ public class EmAnaliseSetor implements EstadoPedido {
         if (texto.contains("BOLSA") || texto.contains("PROUNI") || texto.contains("FIES")) {
             return "PROUNI/FIES";
         }
+        if (texto.contains("CONTAS A RECEBER")) {
+            return "CONTAS A RECEBER";
+        }
         if (texto.contains("FINANCEIR")) {
             return "FINANCEIRO";
         }

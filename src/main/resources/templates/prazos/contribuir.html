@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Contribuir com prazo')}"></head>
+<body>
+    <header th:replace="~{fragments/layout :: menu}"></header>
+
+    <main class="container">
+        <div th:replace="~{fragments/layout :: mensagens}"></div>
+
+        <h1>Contribuir com prazo</h1>
+        <p>Seu pedido já foi concluído? Cole o histórico de etapas dele e ajude os próximos alunos a saber quanto tempo cada setor costuma levar.</p>
+
+        <p class="aviso aviso-info">Guardamos só o tipo do requerimento e os dias em cada setor. O texto colado não é salvo.</p>
+
+        <form th:action="@{/prazos/contribuir}" th:object="${contribuicaoForm}" method="post">
+            <label for="categoriaId">Categoria do pedido</label>
+            <select id="categoriaId" th:field="*{categoriaId}"
+                    th:aria-invalid="${#fields.hasErrors('categoriaId')} ? 'true'">
+                <option value="">Selecione</option>
+                <optgroup th:each="grupo : ${categorias}" th:label="${grupo.key.rotulo}">
+                    <option th:each="c : ${grupo.value}" th:value="${c.id}" th:text="${c.nomeNoPortal}"></option>
+                </optgroup>
+            </select>
+            <small th:if="${#fields.hasErrors('categoriaId')}" th:errors="*{categoriaId}"></small>
+
+            <label for="historico">Histórico de etapas</label>
+            <textarea id="historico" th:field="*{historico}" rows="10" maxlength="5000"
+                      placeholder="Histórico de etapas&#10;Data de conclusão:01/07/2026 17:20:02&#10;ABERTURA DO ATENDIMENTO&#10;..."
+                      th:aria-invalid="${#fields.hasErrors('historico')} ? 'true'"></textarea>
+            <small>No portal, abra o protocolo concluído e copie o bloco "Histórico de etapas" inteiro.</small>
+            <small th:if="${#fields.hasErrors('historico')}" th:errors="*{historico}"></small>
+
+            <button type="submit">Ver prévia</button>
+        </form>
+    </main>
+
+    <footer th:replace="~{fragments/layout :: rodape}"></footer>
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Prévia do prazo')}"></head>
+<body>
+    <header th:replace="~{fragments/layout :: menu}"></header>
+
+    <main class="container">
+        <div th:replace="~{fragments/layout :: mensagens}"></div>
+
+        <h1>Prévia do prazo</h1>
+        <p>Confira o que lemos do histórico. Nada foi guardado ainda.</p>
+
+        <article>
+            <h2 th:text="${previa.categoria.nomeNoPortal}"></h2>
+            <p>Resultado: <strong th:text="${previa.resultado.rotulo}"></strong></p>
+            <p>Total: <strong th:text="${previa.totalDias}"></strong> dia(s), concluído em
+                <span th:text="${#temporals.format(previa.mesConclusao, 'MM/yyyy')}"></span>.</p>
+
+            <table th:unless="${#lists.isEmpty(previa.etapas)}">
+                <thead>
+                    <tr>
+                        <th scope="col">Setor</th>
+                        <th scope="col">Dias</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="etapa : ${previa.etapas}">
+                        <td th:text="${etapa.setor}"></td>
+                        <td th:text="${etapa.dias}"></td>
+                    </tr>
+                </tbody>
+            </table>
+            <p th:if="${#lists.isEmpty(previa.etapas)}">Nenhum setor foi identificado no histórico. Vamos guardar só o total de dias.</p>
+        </article>
+
+        <p class="aviso aviso-info">Guardamos só o tipo do requerimento e os dias em cada setor.</p>
+
+        <form th:action="@{/prazos/contribuir/confirmar}" th:object="${confirmacaoForm}" method="post">
+            <input type="hidden" th:field="*{categoriaId}">
+            <input type="hidden" th:field="*{resultado}">
+            <input type="hidden" th:field="*{totalDias}">
+            <input type="hidden" th:field="*{mesConclusao}">
+            <th:block th:each="etapa, i : *{etapas}">
+                <input type="hidden" th:field="*{etapas[__${i.index}__].setor}">
+                <input type="hidden" th:field="*{etapas[__${i.index}__].dias}">
+            </th:block>
+
+            <button type="submit">Confirmar e guardar</button>
+            <a th:href="@{/prazos/contribuir}" role="button" class="secondary outline">Cancelar</a>
+        </form>
+    </main>
+
+    <footer th:replace="~{fragments/layout :: rodape}"></footer>
+</body>
+</html>

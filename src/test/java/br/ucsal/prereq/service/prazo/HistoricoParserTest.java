@@ -250,4 +250,29 @@ class HistoricoParserTest {
                 () -> HistoricoParser.ler(texto));
         assertEquals("Não reconhecemos o histórico. Copie o bloco inteiro.", ex.getMessage());
     }
+
+    @Test
+    void deveReconhecerContasAReceberQuandoEtapaCitarOSetor() {
+        String texto = """
+                Histórico de etapas
+                Data de conclusão:02/03/2026 08:00:00
+                ABERTURA DO ATENDIMENTO
+                Data de conclusão:10/03/2026 10:00:00
+                ANÁLISE DE CONTAS A RECEBER
+                Data de conclusão:10/03/2026 10:00:4
+                """;
+
+        ResultadoLeitura resultado = HistoricoParser.ler(texto);
+
+        assertEquals(List.of(
+                new EtapaLida("CONTAS A RECEBER", LocalDate.of(2026, 3, 2), LocalDate.of(2026, 3, 10), 8)),
+                resultado.etapas());
+    }
+
+    @Test
+    void deveInformarDataDeConclusaoQuandoLerAmostra02() throws Exception {
+        ResultadoLeitura resultado = HistoricoParser.ler(carregarAmostra("amostra-02.txt"));
+
+        assertEquals(LocalDate.of(2026, 7, 8), resultado.conclusao());
+    }
 }

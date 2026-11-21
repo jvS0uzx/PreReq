@@ -77,7 +77,7 @@ public class HistoricoParser {
             resultado = ResultadoFinal.ENCERRADO;
         }
 
-        return new ResultadoLeitura(ctx.getEtapas(), resultado, totalDias);
+        return new ResultadoLeitura(ctx.getEtapas(), resultado, totalDias, ultimaData);
     }
 
     private static LocalDate lerData(String data) {
