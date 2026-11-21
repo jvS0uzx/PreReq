@@ -1,5 +1,5 @@
 nome;descricao
 Coordenação do curso;Coordenação do curso em que o aluno está matriculado
 Contas a Receber;Setor do Financeiro que analisa pedidos de reembolso
-Registro Acadêmico;Analisa pedidos acadêmicos como trancamento de disciplina e transferência interna
+Registro Acadêmico;Analisa pedidos acadêmicos, como o trancamento de disciplina
 Financeiro;Recalcula as parcelas quando o pedido muda o valor da mensalidade
