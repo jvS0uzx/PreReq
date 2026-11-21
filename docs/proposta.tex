@@ -129,8 +129,8 @@ o que escrever e quanto tempo costuma levar. Nenhum passo é acrescentado ao pro
   \item \textbf{Prazo de referência.} Alunos podem colar o ``Histórico de etapas'' de um protocolo já
         concluído. O sistema lê as datas, calcula quantos dias o pedido ficou em cada setor e guarda
         apenas o tipo de requerimento e os intervalos, sem nome, RA ou texto do pedido. Com isso,
-        mostra a mediana de dias por tipo e por setor, e o aluno sabe se a espera dele está dentro do
-        normal ou se já faz sentido procurar a Ouvidoria.
+        mostra a mediana e o percentil 75 de dias por tipo e por setor, e o aluno sabe se a espera dele
+        está dentro do normal ou se já faz sentido procurar a Ouvidoria.
   \item \textbf{Registro de indeferimentos.} Quando um pedido volta negado por motivo de procedimento
         (``campo equivocado'', ``faltou documento''), o motivo vira uma regra nova da triagem, para que
         o próximo aluno não caia no mesmo erro.
@@ -149,25 +149,33 @@ dificilmente seria aceito pela instituição.
 
 \subsection{Arquitetura e tecnologias}
 
-A aplicação será feita em Java 21 com Spring Boot 3, seguindo a stack definida para a disciplina:
+A aplicação foi feita em Java 21 com Spring Boot 4.1, seguindo a stack definida para a disciplina:
 \begin{itemize}
-  \item Spring Web e Thymeleaf para as telas, sem framework de front-end separado;
-  \item Spring Data JPA com PostgreSQL (H2 durante o desenvolvimento e nos testes);
-  \item JUnit 5 e Mockito para testes de unidade da triagem e do cálculo de prazos;
-  \item Docker Compose para subir aplicação e banco na demonstração.
+  \item Spring Web (MVC) e Thymeleaf para as telas, com Pico.css servido pela própria aplicação e sem
+        framework de front-end separado;
+  \item Spring Data JPA com PostgreSQL hospedado no Neon, um serviço \emph{serverless}. Não há banco
+        local para subir: cada integrante usa a própria \emph{branch} do Neon. O H2 fica só nos testes;
+  \item Spring Security na área administrativa, com login por formulário. As telas do aluno continuam
+        públicas e sem cadastro;
+  \item JUnit 5 e Mockito para os testes, que rodam em cada \emph{pull request} pelo GitHub Actions.
 \end{itemize}
 
 O domínio aproveita bem os conceitos de orientação a objetos vistos no semestre:
 \begin{itemize}
-  \item \textbf{herança e polimorfismo} em \texttt{TipoRequerimento}, já que cada tipo tem documentos,
-        setores e efeitos próprios;
-  \item \textbf{Chain of Responsibility} na triagem: cada regra tenta reconhecer a descrição e, se não
-        conseguir, passa para a seguinte;
-  \item \textbf{State} para representar as etapas lidas do histórico (em análise no Registro
-        Acadêmico, no Financeiro, deferido, indeferido);
-  \item \textbf{Strategy} no cálculo do prazo de referência, permitindo trocar mediana por percentil
-        sem mexer no resto;
-  \item \textbf{Observer} para avisar o aluno quando o prazo dele passar do usual para aquele tipo.
+  \item \textbf{herança e polimorfismo} em \texttt{TipoRequerimento} e nas subclasses
+        \texttt{RequerimentoAcademico}, \texttt{RequerimentoFinanceiro}, \texttt{RequerimentoEstagio} e
+        \texttt{RequerimentoDocumental}, já que cada grupo tem alertas e um trecho próprio no modelo
+        de texto;
+  \item \textbf{Chain of Responsibility} na triagem (\texttt{EtapaTriagem}): a etapa das regras com
+        categoria tenta reconhecer a descrição e, se não conseguir, passa para a das regras com canal
+        alternativo e, por fim, para a mensagem padrão;
+  \item \textbf{State} na leitura do histórico (\texttt{LeituraHistorico} e \texttt{EstadoPedido}),
+        com os estados aberto, em análise em um setor, deferido e indeferido;
+  \item \textbf{Strategy} no cálculo do prazo de referência (\texttt{CalculoPrazo}), com mediana e
+        percentil 75, permitindo trocar um pelo outro sem mexer no resto;
+  \item \textbf{Observer} na verificação da espera (\texttt{VerificadorEspera} e
+        \texttt{ObservadorEspera}): cada alerta observa a situação do pedido e avisa o aluno, na
+        própria tela, quando a espera passa do usual para aquele tipo.
 \end{itemize}
 
 \subsection{Quem mantém as informações}
