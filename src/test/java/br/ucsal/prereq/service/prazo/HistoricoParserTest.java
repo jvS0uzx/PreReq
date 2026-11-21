@@ -236,4 +236,18 @@ class HistoricoParserTest {
                 () -> HistoricoParser.ler(texto));
         assertEquals("Não reconhecemos o histórico. Copie o bloco inteiro.", ex.getMessage());
     }
+
+    @Test
+    void deveLancarExcecaoQuandoDiaNaoExistirNoMes() {
+        String texto = """
+                Histórico de etapas
+                Data de conclusão:31/02/2026 10:00:00
+                ABERTURA DO ATENDIMENTO
+                """;
+
+        RegraNegocioException ex = assertThrows(
+                RegraNegocioException.class,
+                () -> HistoricoParser.ler(texto));
+        assertEquals("Não reconhecemos o histórico. Copie o bloco inteiro.", ex.getMessage());
+    }
 }

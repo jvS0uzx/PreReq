@@ -3,6 +3,7 @@ package br.ucsal.prereq.service.prazo;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.time.format.ResolverStyle;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +21,8 @@ public class HistoricoParser {
             Pattern.CASE_INSENSITIVE
     );
 
-    private static final DateTimeFormatter FORMATTER_DATA = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    private static final DateTimeFormatter FORMATTER_DATA = DateTimeFormatter.ofPattern("dd/MM/uuuu")
+            .withResolverStyle(ResolverStyle.STRICT);
 
     public static ResultadoLeitura ler(String texto) {
         if (texto == null || texto.isBlank()) {
