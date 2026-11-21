@@ -9,6 +9,7 @@ historico,historico escolar;HISTÓRICO ESCOLAR - GRADUAÇÃO;;Documento com as d
 disciplinas cursadas,boletim;HISTÓRICO ESCOLAR - GRADUAÇÃO;;Documento com as disciplinas cursadas e as notas;3
 comprovante de matricula,comprovar matricula;COMPROVANTE DE MATRÍCULA - GRADUAÇÃO;;Comprova a matrícula ativa para estágio, empresa ou outra instituição;5
 matricula ativa,estou matriculado;COMPROVANTE DE MATRÍCULA - GRADUAÇÃO;;Comprova a matrícula ativa para estágio, empresa ou outra instituição;3
+declaracao de matricula,declaracao de frequencia,matricula e frequencia,comprovante de frequencia;DECLARAÇÃO DE MATRÍCULA E FREQUÊNCIA NO SEMESTRE ATUAL;;Declaração da matrícula com a frequência no semestre atual. Se a frequência não importa, use o comprovante de matrícula;5
 revisao de prova,revisao da prova,revisao de nota,revisao da nota;REVISÃO DE AVALIAÇÃO;;Pedido para revisar a correção de uma avaliação;5
 nota errada,contestar nota,correcao da prova;REVISÃO DE AVALIAÇÃO;;Pedido para revisar a correção de uma avaliação;3
 atestado medico,doenca,cirurgia,internacao;EXERCÍCIO DOMICILIAR - GRADUAÇÃO;;Atividades feitas em casa quando o aluno não pode ir às aulas por motivo de saúde;5
