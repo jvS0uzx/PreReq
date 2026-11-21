@@ -16,7 +16,7 @@ gestante,gravidez,licenca maternidade;EXERCÍCIO DOMICILIAR - GRADUAÇÃO;;Ativi
 atividade complementar,atividades complementares,horas complementares;ATIVIDADE COMPLEMENTAR;;Registro das horas de atividades complementares;5
 renovar trancamento,renovar o trancamento,renovar meu trancamento,renovacao do trancamento,renovacao de trancamento;RENOVAÇÃO TRANCAMENTO - GRADUAÇÃO;;Renovação de um trancamento que já existe;6
 reclamacao,reclamar,ouvidoria,denuncia;;Ouvidoria;Reclamação sobre atendimento ou serviço vai para a Ouvidoria, não para requerimento;5
-trancar,trancamento,trancar disciplina;TRANCAMENTO DE MATRÍCULA EM DISCIPLINA;;Trancamento de disciplina no semestre. Depois o Financeiro recalcula as parcelas;5
-deixar de cursar,choque de horario;TRANCAMENTO DE MATRÍCULA EM DISCIPLINA;;Trancamento de disciplina no semestre. Depois o Financeiro recalcula as parcelas;3
-transferencia interna,mudar de curso,trocar de curso,mudanca de curso;TRANSFERÊNCIA INTERNA;;Troca de curso dentro da UCSal. Bolsista ProUni passa por análise da bolsa;5
-transferir de curso,outro curso;TRANSFERÊNCIA INTERNA;;Troca de curso dentro da UCSal. Bolsista ProUni passa por análise da bolsa;3
+trancar,trancamento,trancar disciplina;;Coordenação do curso;Não há categoria de trancamento de disciplina na lista do portal. A mais próxima é Renovação Trancamento, que parece servir para renovar um trancamento já existente. Confirme com a coordenação antes de abrir. Depois do Registro Acadêmico o pedido costuma passar pelo Financeiro, que recalcula as parcelas;5
+deixar de cursar,choque de horario;;Coordenação do curso;Não há categoria de trancamento de disciplina na lista do portal. Confirme com a coordenação qual caminho usar;3
+transferencia interna,mudar de curso,trocar de curso,mudanca de curso;;Coordenação do curso;Não há categoria de transferência interna na lista do portal. Não use Transferência Externa, que é para quem vem de outra instituição. Procure a coordenação do curso;5
+transferir de curso,outro curso;;Coordenação do curso;Não há categoria de transferência interna na lista do portal. Procure a coordenação do curso;3
